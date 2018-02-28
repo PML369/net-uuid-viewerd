@@ -31,21 +31,18 @@ public:
 		// The trivial case, we can fit the entire key in the head
 		if (head == NULL)
 		{
-			unsigned int i = length > 63 ? length-63 : 0;
-			pNode tempNode = new RbtTrieNode<KE, V>
-						(&key[i], length-i, val);
-			for (;i > 0; i--)
-			{
-				tempNode = new RbtTrieNode<KE, V>
-							(key[i-1], tempNode);
-			}
-			head = tempNode;
+			head = buildLinearTrie(key, length, val);
 			return true;
 		}
 
 		unsigned int len = length;
 		pNode node = findClosestMatch(key, &len);
-		return false;
+
+		// Key already exists (or is a prefix of one which exists)
+		if (len == 0)
+			return false;
+
+		return true;
 	}
 
 	V *get(KE key[], unsigned int length) {
@@ -66,7 +63,7 @@ private:
 			if (node->isLeaf())
 			{
 				if (node->matchesKeySuffix(&key[index],
-							   *plength))
+							   *plength-index))
 					*plength = 0;
 				else
 					*plength -= index;
@@ -94,6 +91,16 @@ private:
 				node = newNode;
 			}
 		}
+	}
+
+	pNode buildLinearTrie(KE key[], unsigned int length, V *val)
+	{
+		unsigned int i = length > 63 ? length-63 : 0;
+		pNode tempNode = new RbtTrieNode<KE, V>
+						(&key[i], length-i, val);
+		for (;i > 0; i--)
+			tempNode = new RbtTrieNode<KE, V> (key[i-1], tempNode);
+		return tempNode;
 	}
 };
 
