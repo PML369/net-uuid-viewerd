@@ -28,5 +28,4 @@ dtrace_import.out:
 .PHONY: test
 
 test:
-	$(MAKE) -C test clean
 	$(MAKE) -C test run

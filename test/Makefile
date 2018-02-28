@@ -1,7 +1,16 @@
 CXXTESTGEN = cxxtest/bin/cxxtestgen
 CXXTESTINCLUDE = cxxtest/
 
-CPPS = RbtTrieTest.cpp RbtTrieInternalTest.cpp RbtTrieNodeTest.cpp
+TESTS = RbtTrie RbtTrieInternal RbtTrieNode
+CPPS = $(TESTS:%=%Test.cpp)
+
+DEPDIR = .d
+INCLUDE = -I$(CXXTESTINCLUDE) -I..
+
+DEPFLAGS = -MD
+
+COMPILE.cpp = c++ -g $(DEPFLAGS) $(INCLUDE) -c
+POSTCOMPILE = @mv -f $*.d $(DEPDIR)/$*.d && touch $@
 
 build: runRbtTrieTest.out
 
@@ -11,9 +20,17 @@ runner.cpp:
 $(CPPS): $(.PREFIX).hpp
 	$(CXXTESTGEN) --error-printer --part -o $(.TARGET) $(.PREFIX).hpp
 
-runRbtTrieTest.out: $(CPPS) runner.cpp
-	$(info ${TESTS})
-	c++ -g -I$(CXXTESTINCLUDE) -I.. -o $(.TARGET) $(.ALLSRC)
+
+$(TESTS:%=%Test.o) : $(.PREFIX).cpp $(DEPDIR)/$(.PREFIX).d
+	$(COMPILE.cpp) -o $(.TARGET) $<
+	$(POSTCOMPILE)
+
+runner.o : runner.cpp
+	$(COMPILE.cpp) -o $(.TARGET) $<
+	$(POSTCOMPILE)
+
+runRbtTrieTest.out: $(CPPS:%.cpp=%.o) runner.o
+	c++ -o $(.TARGET) $(.ALLSRC)
 
 run: build
 	./runRbtTrieTest.out
@@ -22,3 +39,13 @@ clean:
 	rm -f ./runRbtTrieTest.out
 	rm -f $(CPPS)
 	rm -f runner.cpp
+
+$(DEPDIR)/%.d: ;
+.PRECIOUS: $(DEPDIR)/%.d
+
+
+.for INC in $(TESTS:%=$(DEPDIR)/%Test.d)
+	.if exists($(INC))
+		include $(INC)
+	.endif
+.endfor
