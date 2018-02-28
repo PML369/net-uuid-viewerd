@@ -1,7 +1,7 @@
 CXXTESTGEN = cxxtest/bin/cxxtestgen
 CXXTESTINCLUDE = cxxtest/
 
-CPPS = RbtTrieTest.cpp RbtTrieNodeTest.cpp
+CPPS = RbtTrieTest.cpp RbtTrieInternalTest.cpp RbtTrieNodeTest.cpp
 
 build: runRbtTrieTest.out
 

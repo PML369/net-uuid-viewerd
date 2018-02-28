@@ -18,6 +18,7 @@
 
 template <typename KE, typename V>
 class RbtTrie {
+	friend class RbtTrieInternalTest;
 private:
 	typedef RbtTrieNode<KE, V> *pNode;
 	pNode head;
