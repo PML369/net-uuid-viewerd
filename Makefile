@@ -23,3 +23,10 @@ dtrace_import.out:
 		dtrace_import.c \
 		-l dtrace -l proc -l ctf -l elf -l z -l rtld_db -l pthread -l util \
 		-o $(BINDIR)/dtrace_import
+
+
+.PHONY: test
+
+test:
+	$(MAKE) -C test clean
+	$(MAKE) -C test run
