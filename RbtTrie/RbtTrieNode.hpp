@@ -47,17 +47,17 @@ public:
 	/* Leaf non-suffix constructor */
 	RbtTrieNode(KE keyEntry, V *payload)
 	{
-		this->keyEntry = keyEntry;
-		left.payload = payload;
-		middle = NULL;
-		right.suffix = NULL;
-		flags.isRed = false;
-		flags.isLeaf = true;
-		flags.suffixLen = 0;
+		constructWithSingletonSuffix(keyEntry, payload);
 	}
 	/* Leaf suffix constructor */
 	RbtTrieNode(KE *keySuffix, unsigned int suffixLen, V *payload)
 	{
+		if (suffixLen == 1)
+		{
+			constructWithSingletonSuffix(keySuffix[0], payload);
+			return;
+		}
+
 		left.payload = payload;
 		middle = NULL;
 		right.suffix = new KE[suffixLen];
@@ -77,7 +77,7 @@ public:
 		right.node = NULL;
 		flags.isRed = false;
 		flags.isLeaf = false;
-		flags.suffixLen = 0;
+		flags.suffixLen = 1;
 	}
 
 	bool isRed()  { return flags.isRed;  }
@@ -134,7 +134,10 @@ public:
 
 		*len += flags.suffixLen;
 		KE *copy = new KE[*len];
-		memcpy(copy, right.suffix, *len);
+		if (flags.suffixLen == 1)
+			copy[0] = keyEntry;
+		else
+			memcpy(copy, right.suffix, *len);
 		return copy;
 	}
 
@@ -142,6 +145,18 @@ public:
 	{
 		if (isLeaf() && right.suffix != NULL)
 			delete[] right.suffix;
+	}
+
+private:
+	void constructWithSingletonSuffix(KE keyEntry, V *payload)
+	{
+		this->keyEntry = keyEntry;
+		left.payload = payload;
+		middle = NULL;
+		right.suffix = NULL;
+		flags.isRed = false;
+		flags.isLeaf = true;
+		flags.suffixLen = 1;
 	}
 };
 #endif /* RBT_TRIE_NODE_HPP */
