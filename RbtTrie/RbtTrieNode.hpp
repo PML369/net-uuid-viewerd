@@ -50,7 +50,7 @@ public:
 		this->keyEntry = keyEntry;
 		left.payload = payload;
 		middle = NULL;
-		right.node = NULL;
+		right.suffix = NULL;
 		flags.isRed = false;
 		flags.isLeaf = true;
 		flags.suffixLen = 0;
@@ -60,7 +60,8 @@ public:
 	{
 		left.payload = payload;
 		middle = NULL;
-		right.suffix = keySuffix;
+		right.suffix = new KE[suffixLen];
+		memcpy(right.suffix, keySuffix, suffixLen);
 		flags.isRed = false;
 		flags.isLeaf = true;
 		flags.suffixLen = suffixLen;
@@ -125,6 +126,22 @@ public:
 			if (key[i] < suffix[i] || suffix[i] < key[i])
 				return false;
 		return true;
+	}
+	KE *getSuffixCopy(unsigned int *len)
+	{
+		if (!flags.isLeaf)
+			return NULL;
+
+		*len += flags.suffixLen;
+		KE *copy = new KE[*len];
+		memcpy(copy, right.suffix, *len);
+		return copy;
+	}
+
+	~RbtTrieNode()
+	{
+		if (isLeaf() && right.suffix != NULL)
+			delete[] right.suffix;
 	}
 };
 #endif /* RBT_TRIE_NODE_HPP */
