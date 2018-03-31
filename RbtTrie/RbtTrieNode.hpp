@@ -95,8 +95,17 @@ public:
 	}
 	void setLeft(RbtTrieNode *node)
 	{
-		if (!flags.isLeaf)
-			left.node = node;
+		if (flags.isLeaf)
+			return;
+		left.node = node;
+		node->setParent(this);
+	}
+	void clearLeft(void)
+	{
+		if (flags.isLeaf) return;
+		if (left.node)
+			left.node->clearParent();
+		left.node = NULL;
 	}
 
 	RbtTrieNode *getRight()
@@ -105,8 +114,17 @@ public:
 	}
 	void setRight(RbtTrieNode *node)
 	{
-		if (!flags.isLeaf)
-			right.node = node;
+		if (flags.isLeaf)
+			return;
+		right.node = node;
+		node->setParent(this);
+	}
+	void clearRight(void)
+	{
+		if (flags.isLeaf) return;
+		if (right.node)
+			right.node->clearParent();
+		right.node = NULL;
 	}
 
 	V *getPayload()
