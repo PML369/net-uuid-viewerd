@@ -41,8 +41,62 @@ public:
 		// Key already exists (or is a prefix of one which exists)
 		if (len == 0)
 			return false;
+		KE *keySuffix = &key[length - len];
 
-		return true;
+		if (node->isLeaf())
+		{
+			unsigned int nodeSuffixLen = 0;
+			KE *nodeSuffix = node->getSuffixCopy(&nodeSuffixLen);
+
+			unsigned int suffixLen = (len < nodeSuffixLen ? len :
+								nodeSuffixLen);
+			unsigned int i = 0;
+			for (; i < suffixLen; i++)
+				if (keySuffix[i] < nodeSuffix[i] ||
+						nodeSuffix[i] < keySuffix[i])
+					break;
+			if (i == suffixLen) // One key is a prefix of another
+				return false;
+
+			pNode newHead = buildLinearTrie(nodeSuffix,
+							nodeSuffixLen,
+							(nodeSuffixLen -i-1),
+							node->getPayload());
+
+			pNode split = newHead;
+			for (; !split->isLeaf(); split = split->getChild()) ;
+			split = split->getParent();
+
+			pNode branch = buildLinearTrie(&keySuffix[i],
+							len-i, len -i-1, val);
+			branch->setRed(true);
+			if (branch->getKeyEntry() < split->getKeyEntry())
+				split->setLeft(branch);
+			else
+				split->setRight(branch);
+
+			if (node == head)
+				head = newHead;
+			else
+				node->getParent()->setChild(newHead);
+
+			delete node;
+			delete[] nodeSuffix;
+			return true;
+		}
+		else
+		{
+			pNode branch = buildLinearTrie(keySuffix, len,
+								  len-1, val);
+			if (branch->getKeyEntry() < node->getKeyEntry())
+				node->setLeft(branch);
+			else
+				node->setRight(branch);
+
+			fixupRedBlackInvariants(branch);
+			return true;
+		}
+		return false;
 	}
 
 	V *get(KE key[], unsigned int length) {
@@ -107,6 +161,21 @@ private:
 			tempNode = new RbtTrieNode<KE, V>(key[i-1], tempNode);
 		return tempNode;
 	}
+
+	void fixupRedBlackInvariants(pNode newNode)
+	{
+		if (newNode->getParent() == NULL ||
+				newNode->getParent()->getChild() == newNode)
+		{
+			// This node is the head of its RB tree, so it is black
+			newNode->setRed(false);
+			return;
+		}
+
+		newNode->setRed(true); // On insert, assume node is red for now
+		// TODO: Implement rotations etc to maintain invariants
+	}
+	
 	void replaceNode(pNode nOld, pNode nNew)
 	{
 		pNode p = nOld->getParent();
