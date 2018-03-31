@@ -5,12 +5,18 @@
 static dtrace_hdl_t* g_dtp;
 
 static int chewrec (const dtrace_probedata_t *data, const dtrace_recdesc_t *rec, void *arg) {
-   printf("chewing dtrace record ..\n");
    // A NULL rec indicates that we've processed the last record.
    if (rec == NULL) {
       return (DTRACE_CONSUME_NEXT);
    }
    return (DTRACE_CONSUME_THIS);
+}
+
+
+int buf_read(const dtrace_bufdata_t *buf, void *arg)
+{
+	printf("%s", buf->dtbda_buffered);
+	return 0;
 }
 
 //static const char* g_prog = "BEGIN { printf(\"hello from dtrace\\n\"); }";
@@ -35,6 +41,7 @@ int main (int argc, char** argv) {
 
    (void) dtrace_setopt(g_dtp, "bufsize", "4m");
    (void) dtrace_setopt(g_dtp, "aggsize", "4m");
+   dtrace_handle_buffered(g_dtp, &buf_read, NULL);
    printf("dtrace options set\n");
 
    dtrace_prog_t* prog;
@@ -81,7 +88,7 @@ int main (int argc, char** argv) {
          }
       }
 
-      switch (dtrace_work(g_dtp, stdout, NULL, chewrec, NULL)) {
+      switch (dtrace_work(g_dtp, NULL, NULL, chewrec, NULL)) {
          case DTRACE_WORKSTATUS_DONE:
             done = 1;
             break;
