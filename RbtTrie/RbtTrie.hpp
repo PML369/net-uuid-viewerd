@@ -102,6 +102,44 @@ private:
 			tempNode = new RbtTrieNode<KE, V> (key[i-1], tempNode);
 		return tempNode;
 	}
+	void replaceNode(pNode nOld, pNode nNew)
+	{
+		pNode p = nOld->getParent();
+		if (p == NULL)
+		{
+			if (nOld == head)
+			{
+				head = nNew;
+				nNew->clearParent();
+			}
+			return;
+		}
+
+		if (nOld == p->getLeft())
+			p->setLeft(nNew);
+		if (nOld == p->getChild())
+			p->setChild(nNew);
+		if (nOld == p->getRight())
+			p->setRight(nNew);
+	}
+	void rotateLeft(pNode x) // Idential formulation to CLRS
+	{
+		if (x == NULL) return;
+		pNode y = x->getRight();
+		if (y == NULL) return;
+		x->setRight(y->getLeft()); // beta
+		replaceNode(x, y);
+		y->setLeft(x);
+	}
+	void rotateRight(pNode y) // Idential formulation to CLRS
+	{
+		if (y == NULL) return;
+		pNode x = y->getLeft();
+		if (x == NULL) return;
+		y->setLeft(x->getRight()); // beta
+		replaceNode(y, x);
+		x->setRight(y);
+	}
 };
 
 #endif /* RBT_TRIE_HPP */

@@ -37,4 +37,44 @@ public:
 			}
 		}
 	}
+	
+	void testRotation(void)
+	{
+		RbtTrieNode<char, int> *p = NULL;
+		RbtTrieNode<char, int> 	alpha('x', p),
+					beta ('x', p),
+					gamma('x', p),
+					x    ('x', p),
+					y    ('x', p),
+					head ('x', p);
+
+		head.setLeft(&x);
+		x.setRight(&y);
+		x.setLeft(&alpha);
+		y.setLeft(&beta);
+		y.setRight(&gamma);
+
+		TS_ASSERT(head.getLeft() == &x);
+		TS_ASSERT(head.getLeft()->getRight() == &y);
+		TS_ASSERT(head.getLeft()->getLeft() == &alpha);
+		TS_ASSERT(head.getLeft()->getRight()->getLeft() == &beta);
+		TS_ASSERT(head.getLeft()->getRight()->getRight() == &gamma);
+
+		RbtTrie<char, int> t;
+		t.rotateLeft (head.getLeft());
+
+		TS_ASSERT(head.getLeft() == &y);
+		TS_ASSERT(head.getLeft()->getRight() == &gamma);
+		TS_ASSERT(head.getLeft()->getLeft() == &x);
+		TS_ASSERT(head.getLeft()->getLeft()->getLeft() == &alpha);
+		TS_ASSERT(head.getLeft()->getLeft()->getRight() == &beta);
+
+		t.rotateRight(head.getLeft());
+
+		TS_ASSERT(head.getLeft() == &x);
+		TS_ASSERT(head.getLeft()->getRight() == &y);
+		TS_ASSERT(head.getLeft()->getLeft() == &alpha);
+		TS_ASSERT(head.getLeft()->getRight()->getLeft() == &beta);
+		TS_ASSERT(head.getLeft()->getRight()->getRight() == &gamma);
+	}
 };
