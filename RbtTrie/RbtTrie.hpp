@@ -31,7 +31,7 @@ public:
 		// The trivial case, we can fit the entire key in the head
 		if (head == NULL)
 		{
-			head = buildLinearTrie(key, length, val);
+			head = buildLinearTrie(key, length, length, val);
 			return true;
 		}
 
@@ -93,13 +93,18 @@ private:
 		}
 	}
 
-	pNode buildLinearTrie(KE key[], unsigned int length, V *val)
+	pNode buildLinearTrie(KE key[], unsigned int length,
+					unsigned int suffixLength, V *val)
 	{
-		unsigned int i = length > 63 ? length-63 : 0;
+		unsigned int i;
+		if (suffixLength <= length && suffixLength <= 63)
+			i = length - suffixLength;
+		else
+			i = length > 63 ? length-63 : 0;
 		pNode tempNode = new RbtTrieNode<KE, V>
 						(&key[i], length-i, val);
 		for (;i > 0; i--)
-			tempNode = new RbtTrieNode<KE, V> (key[i-1], tempNode);
+			tempNode = new RbtTrieNode<KE, V>(key[i-1], tempNode);
 		return tempNode;
 	}
 	void replaceNode(pNode nOld, pNode nNew)
