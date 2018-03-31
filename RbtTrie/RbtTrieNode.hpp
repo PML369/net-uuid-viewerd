@@ -85,8 +85,9 @@ public:
 		flags.suffixLen = 1;
 	}
 
-	bool isRed()  { return flags.isRed;  }
 	bool isLeaf() { return flags.isLeaf; }
+	bool isRed()  { return flags.isRed;  }
+	void setRed(bool red) { flags.isRed = red; }
 
 	RbtTrieNode *getLeft()
 	{
