@@ -38,7 +38,9 @@ run: build
 clean:
 	rm -f ./runRbtTrieTest.out
 	rm -f $(CPPS)
+	rm -f $(TESTS:%=%Test.o)
 	rm -f runner.cpp
+	rm -f runner.o
 
 $(DEPDIR)/%.d: ;
 .PRECIOUS: $(DEPDIR)/%.d

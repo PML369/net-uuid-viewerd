@@ -1,6 +1,9 @@
 .ifndef USR_SRC
 USR_SRC = /usr/src
 .endif
+.ifndef BINDIR
+BINDIR = .
+.endif
 
 all: hello_dtrace.out dtrace_import.out
 
@@ -28,4 +31,5 @@ dtrace_import.out:
 .PHONY: test
 
 test:
+	$(MAKE) -C test clean
 	$(MAKE) -C test run
