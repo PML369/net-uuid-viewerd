@@ -176,6 +176,24 @@ private:
 		// TODO: Implement rotations etc to maintain invariants
 	}
 	
+
+	bool hasOneLRChild(pNode n)
+	{
+		return ((n->getLeft() == NULL && n->getRight() != NULL)
+		     || (n->getLeft() != NULL && n->getRight() == NULL));
+	}
+	bool isOnLeft(pNode child)
+	{
+		if (child == NULL || child->getParent() == NULL)
+			return false;
+		return child->getParent()->getLeft() == child;
+	}
+	bool isOnRight(pNode child)
+	{
+		if (child == NULL || child->getParent() == NULL)
+			return false;
+		return child->getParent()->getRight() == child;
+	}
 	void replaceNode(pNode nOld, pNode nNew)
 	{
 		pNode p = nOld->getParent();
