@@ -27,6 +27,7 @@ private:
 
 	KE keyEntry;
 	RbtTrieNode *middle;
+	RbtTrieNode *parent;
 
 	// To save space, the left and right pointers get re-purposed when
 	// we are a leaf node. The left pointer points to the payload of a
@@ -60,6 +61,7 @@ public:
 
 		left.payload = payload;
 		middle = NULL;
+		parent = NULL;
 		right.suffix = new KE[suffixLen];
 		memcpy(right.suffix, keySuffix, suffixLen);
 		flags.isRed = false;
@@ -74,6 +76,9 @@ public:
 		this->keyEntry = keyEntry;
 		left.node = NULL;
 		middle = child;
+		parent = NULL;
+		if (child != NULL)
+			child->setParent(this);
 		right.node = NULL;
 		flags.isRed = false;
 		flags.isLeaf = false;
@@ -107,9 +112,26 @@ public:
 	{
 		return flags.isLeaf ? left.payload : NULL;
 	}
+	RbtTrieNode *getParent()
+	{
+		return parent;
+	}
+	void setParent(RbtTrieNode *newParent)
+	{
+		parent = newParent;
+	}
+	void clearParent(void) { parent = NULL; }
 	RbtTrieNode *getChild()
 	{
 		return flags.isLeaf ? NULL : middle;
+	}
+	bool setChild(RbtTrieNode *newChild)
+	{
+		if (flags.isLeaf)
+			return false;
+		middle = newChild;
+		middle->setParent(this);
+		return true;
 	}
 
 	KE getKeyEntry() { return keyEntry; }
@@ -153,6 +175,7 @@ private:
 		this->keyEntry = keyEntry;
 		left.payload = payload;
 		middle = NULL;
+		parent = NULL;
 		right.suffix = NULL;
 		flags.isRed = false;
 		flags.isLeaf = true;
