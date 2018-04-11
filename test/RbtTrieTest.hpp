@@ -55,4 +55,16 @@ public:
 		TS_ASSERT(trie.get(k1, 19) == &x);
 		TS_ASSERT(trie.get(k2, 19) == &x);
 	}
+
+	void testPrefixGetAttempt(void)
+	{
+		RbtTrie<char, int> trie;
+		int x = 7;
+		char k[] = "ABCD";
+		TS_ASSERT(trie.insert(k, 4, &x));
+		TS_ASSERT(trie.get(k, 1) == NULL);
+		TS_ASSERT(trie.get(k, 2) == NULL);
+		TS_ASSERT(trie.get(k, 3) == NULL);
+		TS_ASSERT(trie.get(k, 4) == &x);
+	}
 };

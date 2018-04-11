@@ -100,7 +100,11 @@ public:
 	}
 
 	V *get(KE key[], unsigned int length) {
-		return NULL;
+		unsigned int matchLength = length;
+		pNode match = findClosestMatch(key, &matchLength);
+		if (matchLength != 0)
+			return NULL;
+		return match->getPayload();
 	}
 
 	KE **getKeysWithPrefix(KE prefix[]) {
