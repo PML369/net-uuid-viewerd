@@ -164,16 +164,82 @@ private:
 
 	void fixupRedBlackInvariants(pNode newNode)
 	{
-		if (newNode->getParent() == NULL ||
-				newNode->getParent()->getChild() == newNode)
-		{
-			// This node is the head of its RB tree, so it is black
-			newNode->setRed(false);
-			return;
-		}
+		// On insert, assume node is red for now
+		newNode->setRed(true);
+		pNode p, n = newNode;
 
-		newNode->setRed(true); // On insert, assume node is red for now
-		// TODO: Implement rotations etc to maintain invariants
+		while (n->isRed())
+		{
+			if ((p = n->getParent()) == NULL || p->getChild() == n)
+			{
+				// This node is the head of its RB tree,
+				// so it is black
+				n->setRed(false);
+				return;
+			}
+
+			// Rule out simple case where no further work is needed
+			if (!p->isRed())
+				return;
+			pNode pp = p->getParent();
+
+			// Bad case 1: Red promotion
+			// 	The parent and uncle are both red
+			// 	(with the grandparent necessarily black).
+			// Either     B	    or    B     or    B     or    B
+			//           / \         / \         / \         / \
+			//          R   R       R   R       R   R       R   R
+			//         / \	           / \         / \     / \
+			//        R    	              R       R           R
+			if (!isBlack(pp->getLeft()) && !isBlack(pp->getRight()))
+			{
+				pp->getLeft()->setRed(false);
+				pp->getRight()->setRed(false);
+				pp->setRed(true);
+				newNode = pp;
+				continue;
+			}
+
+			// Bad case 2: Rotations into case 3
+			// Either     B	    or    B
+			//           / \         / \
+			//     (a)  R   B   (b) B   R
+			//         / \	           / \
+			//            R	          R
+			if (isOnLeft(p) && isOnRight(n)) // Case 2a
+			{
+				n = p;
+				rotateLeft(n);
+				p = n->getParent();
+			}
+			else if (isOnRight(p) && isOnLeft(n)) // Case 2b
+			{
+				n = p;
+				rotateRight(n);
+				p = n->getParent();
+			}
+
+			// Bad case 3: Rotations
+			// Either     B	    or    B
+			//           / \         / \
+			//     (a)  R   B   (b) B   R
+			//         / \	           / \
+			//        R    	              R
+			if (isOnLeft(p) && isOnLeft(n)) // Case 3a
+			{
+				p->setRed(false);
+				pp->setRed(true);
+				rotateRight(pp);
+				n = p;
+			}
+			else if (isOnRight(p) && isOnRight(n)) // Case 3b
+			{
+				p->setRed(false);
+				pp->setRed(true);
+				rotateLeft(pp);
+				n = p;
+			}
+		}
 	}
 	
 

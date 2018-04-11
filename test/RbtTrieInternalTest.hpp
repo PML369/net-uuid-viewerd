@@ -89,4 +89,158 @@ public:
 		TS_ASSERT(t.isBlack(&node) == true);
 		TS_ASSERT(t.isBlack(NULL) == true);
 	}
+
+#define testRbtFixupSetup(R, L1, L2) \
+		RbtTrie<char, int> trie; \
+		RbtTrieNode<char, int> *ptr = NULL; \
+		RbtTrieNode<char, int> 	head		('x', ptr), \
+					grandparent	('x', ptr), \
+					parent		('x', ptr), \
+					child		('x', ptr), \
+					uncle		('x', ptr); \
+		trie.head = &head; \
+		head.setLeft(&grandparent); \
+		grandparent.setLeft(L1 ? &parent : &uncle); \
+		grandparent.setRight(L1 ? &uncle : &parent); \
+		if (L2) \
+			parent.setLeft(&child); \
+		else \
+			parent.setRight(&child); \
+		\
+		head.setRed(false); \
+		grandparent.setRed(false); \
+		parent.setRed(true); \
+		uncle.setRed(R); \
+		child.setRed(true); \
+		\
+		trie.fixupRedBlackInvariants(&child);
+
+	// Different cases for fixupRbtTrie to handle - there are 8,
+	// coded as follows:
+	// testRbtFixup [uncle colour]
+	// 		[grandparent-parent direction]
+	// 		[parent-child direction]
+	void testRbtFixupRLL(void)
+	{
+		testRbtFixupSetup(true, true, true)
+
+		TS_ASSERT(head.isRed() == false);
+		TS_ASSERT(grandparent.isRed() == true);
+		TS_ASSERT(parent.isRed() == false);
+		TS_ASSERT(uncle.isRed() == false);
+		TS_ASSERT(child.isRed() == true);
+
+		TS_ASSERT(head.getLeft() == &grandparent);
+		TS_ASSERT(grandparent.getLeft() == &parent);
+		TS_ASSERT(grandparent.getRight() == &uncle);
+		TS_ASSERT(parent.getLeft() == &child);
+	}
+	void testRbtFixupRLR(void)
+	{
+		testRbtFixupSetup(true, true, false)
+
+		TS_ASSERT(head.isRed() == false);
+		TS_ASSERT(grandparent.isRed() == true);
+		TS_ASSERT(parent.isRed() == false);
+		TS_ASSERT(uncle.isRed() == false);
+		TS_ASSERT(child.isRed() == true);
+
+		TS_ASSERT(head.getLeft() == &grandparent);
+		TS_ASSERT(grandparent.getLeft() == &parent);
+		TS_ASSERT(grandparent.getRight() == &uncle);
+		TS_ASSERT(parent.getRight() == &child);
+	}
+	void testRbtFixupRRL(void)
+	{
+		testRbtFixupSetup(true, false, true)
+
+		TS_ASSERT(head.isRed() == false);
+		TS_ASSERT(grandparent.isRed() == true);
+		TS_ASSERT(parent.isRed() == false);
+		TS_ASSERT(uncle.isRed() == false);
+		TS_ASSERT(child.isRed() == true);
+
+		TS_ASSERT(head.getLeft() == &grandparent);
+		TS_ASSERT(grandparent.getLeft() == &uncle);
+		TS_ASSERT(grandparent.getRight() == &parent);
+		TS_ASSERT(parent.getLeft() == &child);
+	}
+	void testRbtFixupRRR(void)
+	{
+		testRbtFixupSetup(true, false, false)
+
+		TS_ASSERT(head.isRed() == false);
+		TS_ASSERT(grandparent.isRed() == true);
+		TS_ASSERT(parent.isRed() == false);
+		TS_ASSERT(uncle.isRed() == false);
+		TS_ASSERT(child.isRed() == true);
+
+		TS_ASSERT(head.getLeft() == &grandparent);
+		TS_ASSERT(grandparent.getLeft() == &uncle);
+		TS_ASSERT(grandparent.getRight() == &parent);
+		TS_ASSERT(parent.getRight() == &child);
+	}
+
+
+
+	void testRbtFixupBLL(void)
+	{
+		testRbtFixupSetup(false, true, true)
+
+		TS_ASSERT(head.isRed() == false);
+		TS_ASSERT(grandparent.isRed() == true);
+		TS_ASSERT(parent.isRed() == false);
+		TS_ASSERT(uncle.isRed() == false);
+		TS_ASSERT(child.isRed() == true);
+
+		TS_ASSERT(head.getLeft() == &parent);
+		TS_ASSERT(parent.getLeft() == &child);
+		TS_ASSERT(parent.getRight() == &grandparent);
+		TS_ASSERT(grandparent.getRight() == &uncle);
+	}
+	void testRbtFixupBLR(void)
+	{
+		testRbtFixupSetup(false, true, false)
+
+		TS_ASSERT(head.isRed() == false);
+		TS_ASSERT(grandparent.isRed() == true);
+		TS_ASSERT(parent.isRed() == true);
+		TS_ASSERT(uncle.isRed() == false);
+		TS_ASSERT(child.isRed() == false);
+
+		TS_ASSERT(head.getLeft() == &child);
+		TS_ASSERT(child.getLeft() == &parent);
+		TS_ASSERT(child.getRight() == &grandparent);
+		TS_ASSERT(grandparent.getRight() == &uncle);
+	}
+	void testRbtFixupBRL(void)
+	{
+		testRbtFixupSetup(false, false, true)
+
+		TS_ASSERT(head.isRed() == false);
+		TS_ASSERT(grandparent.isRed() == true);
+		TS_ASSERT(parent.isRed() == true);
+		TS_ASSERT(uncle.isRed() == false);
+		TS_ASSERT(child.isRed() == false);
+
+		TS_ASSERT(head.getLeft() == &child);
+		TS_ASSERT(child.getRight() == &parent);
+		TS_ASSERT(child.getLeft() == &grandparent);
+		TS_ASSERT(grandparent.getLeft() == &uncle);
+	}
+	void testRbtFixupBRR(void)
+	{
+		testRbtFixupSetup(false, false, false)
+
+		TS_ASSERT(head.isRed() == false);
+		TS_ASSERT(grandparent.isRed() == true);
+		TS_ASSERT(parent.isRed() == false);
+		TS_ASSERT(uncle.isRed() == false);
+		TS_ASSERT(child.isRed() == true);
+
+		TS_ASSERT(head.getLeft() == &parent);
+		TS_ASSERT(parent.getRight() == &child);
+		TS_ASSERT(parent.getLeft() == &grandparent);
+		TS_ASSERT(grandparent.getLeft() == &uncle);
+	}
 };
