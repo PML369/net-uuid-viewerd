@@ -42,4 +42,17 @@ public:
 		TS_ASSERT( trie2.insert(k2, 65, &x));
 		TS_ASSERT(!trie2.insert(k2, 65, &x));
 	}
+
+	void testSharedPrefixLeafInsertion(void)
+	{
+		RbtTrie<char, int> trie;
+		int x = 8;
+		char k1[] = "The quick brown fox";
+		char k2[] = "The quick brown dog";
+		TS_ASSERT(trie.insert(k1, 19, &x));
+		TS_ASSERT(trie.insert(k2, 19, &x));
+
+		TS_ASSERT(trie.get(k1, 19) == &x);
+		TS_ASSERT(trie.get(k2, 19) == &x);
+	}
 };

@@ -246,4 +246,78 @@ public:
 			}
 		}
 	}
+
+	void testSharedPrefixLeafInsertion(void)
+	{
+		RbtTrie<char, int> trie;
+		char k1[] = "The quick brown fox";
+		char k2[] = "The quick brown dog";
+		TS_ASSERT(trie.insert(k1, 19, &a));
+		TS_ASSERT(trie.insert(k2, 19, &a));
+
+		RbtTrieNode<char, int> *node = trie.head;
+		TS_ASSERT(node != NULL);
+		for (unsigned int i = 0; node != NULL;
+					 node = node->getChild(), i++)
+		{
+			if (!node->isLeaf())
+			{
+				TS_ASSERT(i < 17);
+				TS_ASSERT(node->getKeyEntry() == k1[i]);
+			}
+			else
+			{
+				unsigned int len = 0;
+				char *suffix = node->getSuffixCopy(&len);
+				TS_ASSERT(suffix != NULL);
+				TS_ASSERT(memcmp(suffix, &k1[i], len) == 0);
+				delete[] suffix;
+
+				TS_ASSERT(node->getParent() != NULL);
+				node = node->getParent();
+				TS_ASSERT(node->getLeft() != NULL);
+				node = node->getLeft();
+				TS_ASSERT(node->getChild() != NULL);
+				node = node->getChild();
+
+				len = 0;
+				suffix = node->getSuffixCopy(&len);
+				TS_ASSERT(suffix != NULL);
+				TS_ASSERT(memcmp(suffix, &k2[i], len) == 0);
+				delete[] suffix;
+			}
+		}
+	}
+
+	void testSharedPrefixInsertion(void)
+	{
+		RbtTrie<char, int> trie;
+		char k1[] = "The quick brown fox";
+		char k2[] = "The quick brown dog";
+		char k3[] = "The cat";
+		char k4[] = "The ant";
+		TS_ASSERT(trie.insert(k1, 19, &a));
+		// This insertion guarantees that the trie contains
+		// "The quick brown " for us to play with
+		TS_ASSERT(trie.insert(k2, 19, &a));
+
+		// This causes a split after "The "
+		TS_ASSERT(trie.insert(k3, 7, &a));
+
+		// This causes a violation of the RB rules, and so a rotation
+		TS_ASSERT(trie.insert(k4, 7, &a));
+
+		// Move through to the node with the split
+		RbtTrieNode<char, int> *node = trie.head;
+		TS_ASSERT(node != NULL);
+		for (unsigned int i = 0; node != NULL && i < 4;
+					 node = node->getChild(), i++)
+			;
+
+		TS_ASSERT(node->getKeyEntry() == 'c');
+		TS_ASSERT(node->getLeft() != NULL);
+		TS_ASSERT(node->getLeft()->getKeyEntry() == 'a');
+		TS_ASSERT(node->getRight() != NULL);
+		TS_ASSERT(node->getRight()->getKeyEntry() == 'q');
+	}
 };
