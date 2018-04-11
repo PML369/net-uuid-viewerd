@@ -219,7 +219,13 @@ private:
 		if (x == NULL) return;
 		pNode y = x->getRight();
 		if (y == NULL) return;
-		x->setRight(y->getLeft()); // beta
+
+		pNode beta = y->getLeft();
+		if (beta != NULL)
+			x->setRight(beta);
+		else
+			x->clearRight();
+
 		replaceNode(x, y);
 		y->setLeft(x);
 	}
@@ -228,7 +234,13 @@ private:
 		if (y == NULL) return;
 		pNode x = y->getLeft();
 		if (x == NULL) return;
-		y->setLeft(x->getRight()); // beta
+
+		pNode beta = x->getRight();
+		if (beta != NULL)
+			y->setLeft(beta);
+		else
+			y->clearLeft();
+
 		replaceNode(y, x);
 		x->setRight(y);
 	}
