@@ -194,6 +194,10 @@ private:
 			return false;
 		return child->getParent()->getRight() == child;
 	}
+	bool isBlack(pNode n)
+	{
+		return n == NULL || !n->isRed();
+	}
 	void replaceNode(pNode nOld, pNode nNew)
 	{
 		pNode p = nOld->getParent();

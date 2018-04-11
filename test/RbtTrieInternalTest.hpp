@@ -77,4 +77,16 @@ public:
 		TS_ASSERT(head.getLeft()->getRight()->getLeft() == &beta);
 		TS_ASSERT(head.getLeft()->getRight()->getRight() == &gamma);
 	}
+
+	void testIsBlackPredicate(void)
+	{
+		RbtTrie<char, int> t;
+		RbtTrieNode<char, int> node('a', &a);
+
+		node.setRed(true);
+		TS_ASSERT(t.isBlack(&node) == false);
+		node.setRed(false);
+		TS_ASSERT(t.isBlack(&node) == true);
+		TS_ASSERT(t.isBlack(NULL) == true);
+	}
 };
