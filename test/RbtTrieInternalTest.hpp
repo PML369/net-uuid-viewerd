@@ -10,13 +10,16 @@
 
 class RbtTrieInternalTest : public CxxTest::TestSuite
 {
+private:
+	int a;
+
 public:
 	void testLongInsertion(void)
 	{
 		RbtTrie<char, int> trie;
 		int x = 4;
 		char k[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890./+=";
-		TS_ASSERT(trie.insert(k, 66, &x));
+		TS_ASSERT(trie.insert(k, 66, &a));
 		RbtTrieNode<char, int> *node = trie.head;
 		TS_ASSERT(node != NULL);
 		for (unsigned int i = 0; node != NULL;
@@ -32,7 +35,7 @@ public:
 				unsigned int len = 0;
 				char *suffix = node->getSuffixCopy(&len);
 				TS_ASSERT(suffix != NULL);
-				TS_ASSERT(memcmp(suffix, &k[i], 66-len) == 0);
+				TS_ASSERT(memcmp(suffix, &k[i], len) == 0);
 				delete[] suffix;
 			}
 		}
