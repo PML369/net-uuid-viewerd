@@ -14,33 +14,18 @@ private:
 	int a;
 
 public:
-	void testLongInsertion(void)
+	void testIsBlackPredicate(void)
 	{
-		RbtTrie<char, int> trie;
-		int x = 4;
-		char k[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890./+=";
-		TS_ASSERT(trie.insert(k, 66, &a));
-		RbtTrieNode<char, int> *node = trie.head;
-		TS_ASSERT(node != NULL);
-		for (unsigned int i = 0; node != NULL;
-					 node = node->getChild(), i++)
-		{
-			TS_ASSERT(i < 66);
-			if (!node->isLeaf())
-			{
-				TS_ASSERT(node->getKeyEntry() == k[i]);
-			}
-			else
-			{
-				unsigned int len = 0;
-				char *suffix = node->getSuffixCopy(&len);
-				TS_ASSERT(suffix != NULL);
-				TS_ASSERT(memcmp(suffix, &k[i], len) == 0);
-				delete[] suffix;
-			}
-		}
+		RbtTrie<char, int> t;
+		RbtTrieNode<char, int> node('a', &a);
+
+		node.setRed(true);
+		TS_ASSERT(t.isBlack(&node) == false);
+		node.setRed(false);
+		TS_ASSERT(t.isBlack(&node) == true);
+		TS_ASSERT(t.isBlack(NULL) == true);
 	}
-	
+
 	void testRotation(void)
 	{
 		RbtTrieNode<char, int> *p = NULL;
@@ -79,18 +64,6 @@ public:
 		TS_ASSERT(head.getLeft()->getLeft() == &alpha);
 		TS_ASSERT(head.getLeft()->getRight()->getLeft() == &beta);
 		TS_ASSERT(head.getLeft()->getRight()->getRight() == &gamma);
-	}
-
-	void testIsBlackPredicate(void)
-	{
-		RbtTrie<char, int> t;
-		RbtTrieNode<char, int> node('a', &a);
-
-		node.setRed(true);
-		TS_ASSERT(t.isBlack(&node) == false);
-		node.setRed(false);
-		TS_ASSERT(t.isBlack(&node) == true);
-		TS_ASSERT(t.isBlack(NULL) == true);
 	}
 
 #define testRbtFixupSetup(R, L1, L2) \
@@ -245,5 +218,32 @@ public:
 		TS_ASSERT(parent.getRight() == &child);
 		TS_ASSERT(parent.getLeft() == &grandparent);
 		TS_ASSERT(grandparent.getLeft() == &uncle);
+	}
+
+	void testLongInsertion(void)
+	{
+		RbtTrie<char, int> trie;
+		int x = 4;
+		char k[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890./+=";
+		TS_ASSERT(trie.insert(k, 66, &a));
+		RbtTrieNode<char, int> *node = trie.head;
+		TS_ASSERT(node != NULL);
+		for (unsigned int i = 0; node != NULL;
+					 node = node->getChild(), i++)
+		{
+			TS_ASSERT(i < 66);
+			if (!node->isLeaf())
+			{
+				TS_ASSERT(node->getKeyEntry() == k[i]);
+			}
+			else
+			{
+				unsigned int len = 0;
+				char *suffix = node->getSuffixCopy(&len);
+				TS_ASSERT(suffix != NULL);
+				TS_ASSERT(memcmp(suffix, &k[i], len) == 0);
+				delete[] suffix;
+			}
+		}
 	}
 };
