@@ -114,9 +114,11 @@ public:
 private:
 	pNode findClosestMatch(KE key[], unsigned int *plength)
 	{
+		if (head == NULL)
+			return NULL;
 		pNode node = head;
 		unsigned int index = 0;
-		while (true)
+		while (*plength > index)
 		{
 			if (node->isLeaf())
 			{
@@ -149,6 +151,9 @@ private:
 				node = newNode;
 			}
 		}
+		// We've consumed all input (perhaps we are prefix matching)
+		*plength = 0;
+		return node;
 	}
 
 	pNode buildLinearTrie(KE key[], unsigned int length,
