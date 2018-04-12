@@ -8,6 +8,9 @@
 #include <cxxtest/TestSuite.h>
 #include <RbtTrie/RbtTrie.hpp>
 
+#include <list>
+#include <iterator>
+
 class RbtTrieInternalTest : public CxxTest::TestSuite
 {
 private:
@@ -64,6 +67,58 @@ public:
 		TS_ASSERT(head.getLeft()->getLeft() == &alpha);
 		TS_ASSERT(head.getLeft()->getRight()->getLeft() == &beta);
 		TS_ASSERT(head.getLeft()->getRight()->getRight() == &gamma);
+	}
+
+	void testCollectionDump(void)
+	{
+		RbtTrie<char, int> trie;
+		char k1[] = "ananas";
+		char k2[] = "anas";
+		char k3[] = "as";
+		TS_ASSERT(trie.insert(k1, 6, &a));
+		TS_ASSERT(trie.insert(k2, 4, &a));
+		TS_ASSERT(trie.insert(k3, 2, &a));
+		std::list<RbtTrie<char, int>::tKey> list;
+		trie.getKeysWithPrefix(NULL, 0, std::back_inserter(list));
+
+		std::list<RbtTrie<char, int>::tKey>::iterator it = list.begin();
+		TS_ASSERT(it->second == 6);
+		TS_ASSERT(memcmp(it->first, k1, 6) == 0);
+		delete[] it->first;
+
+		it++;
+		TS_ASSERT(it->second == 4);
+		TS_ASSERT(memcmp(it->first, k2, 4) == 0);
+		delete[] it->first;
+
+		it++;
+		TS_ASSERT(it->second == 2);
+		TS_ASSERT(memcmp(it->first, k3, 2) == 0);
+		delete[] it->first;
+	}
+
+	void testGetKeysWithPrefix(void)
+	{
+		RbtTrie<char, int> trie;
+		char k1[] = "ananas";
+		char k2[] = "anas";
+		char k3[] = "as";
+		char prefix[] = "an";
+		TS_ASSERT(trie.insert(k1, 6, &a));
+		TS_ASSERT(trie.insert(k2, 4, &a));
+		TS_ASSERT(trie.insert(k3, 2, &a));
+		std::list<RbtTrie<char, int>::tKey> list;
+		trie.getKeysWithPrefix(prefix, 2, std::back_inserter(list));
+
+		std::list<RbtTrie<char, int>::tKey>::iterator it = list.begin();
+		TS_ASSERT(it->second == 6);
+		TS_ASSERT(memcmp(it->first, k1, 6) == 0);
+		delete[] it->first;
+
+		it++;
+		TS_ASSERT(it->second == 4);
+		TS_ASSERT(memcmp(it->first, k2, 4) == 0);
+		delete[] it->first;
 	}
 
 #define testRbtFixupSetup(R, L1, L2) \

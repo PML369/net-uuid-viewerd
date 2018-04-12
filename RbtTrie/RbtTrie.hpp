@@ -23,6 +23,7 @@ private:
 	typedef RbtTrieNode<KE, V> *pNode;
 	pNode head;
 public:
+	typedef std::pair<KE *, unsigned int> tKey;
 	RbtTrie() {
 		head = NULL;
 	}
@@ -107,11 +108,118 @@ public:
 		return match->getPayload();
 	}
 
-	KE **getKeysWithPrefix(KE prefix[]) {
-		return NULL;
+	template <typename OutputIterator>
+	void getKeysWithPrefix(KE prefix[], unsigned int length,
+			OutputIterator out)
+	{
+		unsigned int matchLength = length;
+		pNode match = findClosestMatch(prefix, &matchLength);
+		if (matchLength != 0)
+			return;
+
+		inOrderTraverse(match, prefix, length, length,
+			&RbtTrie<KE, V>::getKeysWithPrefixTraverseAction, &out);
 	}
 
 private:
+	template <typename T>
+	void inOrderTraverse(pNode start, KE prefix[],
+			unsigned int prefixLength, unsigned int prefixAlloc,
+			void (*action)(T *, tKey), T *obj)
+	{
+		if (start == NULL)
+			return;
+
+		if (start->isLeaf())
+		{
+			unsigned int suffixLength = 0;
+			KE *suffix = start->getSuffixCopy(&suffixLength);
+			KE *key = new KE[prefixLength + suffixLength];
+			memcpy(key, prefix, prefixLength);
+			memcpy(&key[prefixLength], suffix, suffixLength);
+			action(obj, tKey(key, prefixLength + suffixLength));
+			delete[] suffix;
+			return;
+		}
+
+		pNode n = start;
+		pNode prev = NULL;
+		while (true)
+		{
+			bool pathFailedTryNext = false;
+
+			if (prev == NULL || prev == n->getParent())
+			{
+				if (n->getLeft() != NULL)
+				{
+					// go left
+					prev = n;
+					n = n->getLeft();
+					continue;
+				}
+				pathFailedTryNext = true;
+			}
+
+			if (pathFailedTryNext || prev == n->getLeft())
+			{
+				if (n->getChild() != NULL)
+				{
+					// recursive call on child
+					if (prefixLength < prefixAlloc)
+					{
+						prefix[prefixLength] =
+							n->getKeyEntry();
+						inOrderTraverse(
+							n->getChild(),
+							prefix,
+							prefixLength + 1,
+							prefixAlloc,
+							action, obj);
+					}
+					else
+					{
+						KE *newPrefix = new
+							KE[prefixAlloc * 2];
+						memcpy(newPrefix, prefix,
+								prefixLength);
+						newPrefix[prefixLength] =
+							n->getKeyEntry();
+						inOrderTraverse(
+							n->getChild(),
+							newPrefix,
+							prefixLength + 1,
+							prefixAlloc * 2,
+							action, obj);
+					}
+				}
+
+				if (n->getRight() != NULL)
+				{
+					// go right
+					prev = n;
+					n = n->getRight();
+					continue;
+				}
+				pathFailedTryNext = true;
+			}
+
+			if (pathFailedTryNext || prev == n->getRight())
+			{
+				if (n == start)
+					break;
+				prev = n;
+				n = n->getParent();
+			}
+		}
+	}
+
+	template <typename OutputIterator>
+	static void getKeysWithPrefixTraverseAction(OutputIterator *out,
+			tKey key)
+	{
+		*((*out)++) = key;
+	}
+
 	pNode findClosestMatch(KE key[], unsigned int *plength)
 	{
 		if (head == NULL)
