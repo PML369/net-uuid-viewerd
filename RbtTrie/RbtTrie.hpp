@@ -159,8 +159,11 @@ private:
 			i = length - suffixLength;
 		else
 			i = length > 63 ? length-63 : 0;
+
+		KE *newSuffix = new KE[length-i];
+		memcpy(newSuffix, &key[i], length-i);
 		pNode tempNode = new RbtTrieNode<KE, V>
-						(&key[i], length-i, val);
+						(newSuffix, length-i, val);
 		for (;i > 0; i--)
 			tempNode = new RbtTrieNode<KE, V>(key[i-1], tempNode);
 		return tempNode;
