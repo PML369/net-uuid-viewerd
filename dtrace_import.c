@@ -30,7 +30,6 @@ syscall::open*:entry
 );
 
 static int g_intr;
-static int g_exited;
 
 static void intr (int signo)
 {
@@ -102,7 +101,7 @@ int main (int argc, char** argv)
 			dtrace_sleep(g_dtp);
 		}
 
-		if (done || g_intr || g_exited)
+		if (done || g_intr)
 		{
 			done = 1;
 			if (dtrace_stop(g_dtp) == -1)
