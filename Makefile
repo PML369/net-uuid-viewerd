@@ -5,9 +5,9 @@ USR_SRC = /usr/src
 BINDIR = .
 .endif
 
-all: hello_dtrace.out dtrace_import.out
+all: hello_dtrace net-uuid-viewerd
 
-hello_dtrace.out:
+hello_dtrace:
 	cc \
 		-I $(USR_SRC)/cddl/compat/opensolaris/include/ \
 		-I $(USR_SRC)/cddl/contrib/opensolaris/lib/libdtrace/common/ \
@@ -17,15 +17,15 @@ hello_dtrace.out:
 		-l dtrace -l proc -l ctf -l elf -l z -l rtld_db -l pthread -l util \
 		-o $(BINDIR)/hello_dtrace
 
-dtrace_import.out:
+net-uuid-viewerd:
 	cc \
 		-I $(USR_SRC)/cddl/compat/opensolaris/include/ \
 		-I $(USR_SRC)/cddl/contrib/opensolaris/lib/libdtrace/common/ \
 		-I $(USR_SRC)/sys/cddl/compat/opensolaris/ \
 		-I $(USR_SRC)/sys/cddl/contrib/opensolaris/uts/common/ \
-		dtrace_import.c \
+		net-uuid-viewerd.cpp \
 		-l dtrace -l proc -l ctf -l elf -l z -l rtld_db -l pthread -l util \
-		-o $(BINDIR)/dtrace_import
+		-o $(BINDIR)/net-uuid-viewerd
 
 
 .PHONY: test
