@@ -15,18 +15,46 @@ static int chewrec (const dtrace_probedata_t *data,
 
 int buf_read(const dtrace_bufdata_t *buf, void *arg)
 {
-	printf("%s", buf->dtbda_buffered);
+	printf("%s\n", buf->dtbda_buffered);
 	return 0;
 }
 
 #define LONG_STRING_LITERAL(...) #__VA_ARGS__
-//static const char* g_prog = "BEGIN { printf(\"hello from dtrace\\n\"); }";
 static const char* g_prog = LONG_STRING_LITERAL(
 
-syscall::open*:entry
+net_uuid:packet::trace-start
 {
-	printf("%s %s\n", execname, copyinstr(arg0));
+	printf("trace-start %s %d %p", stringof(arg0), timestamp, arg1);
 }
+net_uuid:packet::trace-stop
+{
+	printf("trace-stop %s %d", stringof(arg0), timestamp);
+}
+net_uuid:mem::alloc
+{
+	printf("alloc %s %p", stringof(arg0), arg1);
+}
+net_uuid:packet::fragment
+{
+	printf("fragment %s %s", stringof(arg0), stringof(arg1));
+}
+net_uuid:packet::from-socket
+{
+	printf("from-socket %s %s", stringof(arg0), stringof(arg1));
+}
+net_uuid:packet::to-socket
+{
+	printf("to-socket %s %s", stringof(arg0), stringof(arg1));
+}
+net_uuid:packet::to-subsys
+{
+	printf("to-subsys %s %s", stringof(arg0), stringof(arg1));
+}
+net_uuid:packet::drop
+{
+	printf("drop %s %d", stringof(arg0), timestamp);
+}
+
 );
 
 static int g_intr;
