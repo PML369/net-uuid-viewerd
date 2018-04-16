@@ -5,6 +5,24 @@ USR_SRC = /usr/src
 BINDIR = .
 .endif
 
+
+PROBES = trace_start
+CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
+	net-uuid-viewerd.cpp \
+	dtrace_import.cpp
+
+DEPDIR = .d
+INCLUDE = -I $(USR_SRC)/cddl/compat/opensolaris/include/ \
+		-I $(USR_SRC)/cddl/contrib/opensolaris/lib/libdtrace/common/ \
+		-I $(USR_SRC)/sys/cddl/compat/opensolaris/ \
+		-I $(USR_SRC)/sys/cddl/contrib/opensolaris/uts/common/ \
+
+DEPFLAGS = -MD
+
+COMPILE.cpp = c++ -std=c++11 -g $(DEPFLAGS) $(INCLUDE) -c
+POSTCOMPILE = @mv -f $*.d $(DEPDIR)/$*.d && touch $@
+
+
 all: hello_dtrace net-uuid-viewerd
 
 hello_dtrace:
@@ -17,19 +35,33 @@ hello_dtrace:
 		-l dtrace -l proc -l ctf -l elf -l z -l rtld_db -l pthread -l util \
 		-o $(BINDIR)/hello_dtrace
 
-net-uuid-viewerd:
-	cc \
-		-I $(USR_SRC)/cddl/compat/opensolaris/include/ \
-		-I $(USR_SRC)/cddl/contrib/opensolaris/lib/libdtrace/common/ \
-		-I $(USR_SRC)/sys/cddl/compat/opensolaris/ \
-		-I $(USR_SRC)/sys/cddl/contrib/opensolaris/uts/common/ \
-		net-uuid-viewerd.cpp \
+net-uuid-viewerd: $(CPPS:%.cpp=%.o)
+	c++ \
+		$(CPPS:%.cpp=%.o) \
 		-l dtrace -l proc -l ctf -l elf -l z -l rtld_db -l pthread -l util \
 		-o $(BINDIR)/net-uuid-viewerd
 
+$(CPPS:%.cpp=%.o) : $(.PREFIX).cpp $(DEPDIR)/$(.PREFIX).d
+	$(COMPILE.cpp) -o $(.TARGET) $<
+	$(POSTCOMPILE)
+
+clean:
+	rm -f $(CPPS:%.cpp=%.o)
+	rm -f $(BINDIR)/net-uuid-viewerd
+	rm -f $(BINDIR)/hello_dtrace
 
 .PHONY: test
 
 test:
 	$(MAKE) -C test clean
 	$(MAKE) -C test run
+
+$(DEPDIR)/%.d: ;
+.PRECIOUS: $(DEPDIR)/%.d
+
+
+.for INC in $(CPPS:%.cpp=$(DEPDIR)/%.d)
+	.if exists($(INC))
+		include $(INC)
+	.endif
+.endfor
