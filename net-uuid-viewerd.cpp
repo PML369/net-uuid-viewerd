@@ -19,7 +19,9 @@ void installInterruptHandler()
 int main (int argc, char** argv)
 {
 	unsigned int loopRate = 100;
-	if (!setupDTrace(loopRate))
+	NetUuidData data;
+
+	if (!setupDTrace(loopRate, &data))
 		return -1;
 
 	if (!installProbes())

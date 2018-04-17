@@ -27,7 +27,7 @@ static int buf_read(const dtrace_bufdata_t *buf, void *arg)
 	for (std::vector<ProbeType *>::iterator it = probes.begin();
 			it != probes.end(); ++it)
 		if (prefix.compare((*it)->getBufferPrefix()) == 0)
-			(*it)->processBuffer(sstream, NULL);
+			(*it)->processBuffer(sstream, (NetUuidData *)arg);
 	return 0;
 }
 
@@ -68,7 +68,7 @@ net_uuid:packet::drop
 int applicationInterrupted;
 
 
-bool setupDTrace(unsigned int rate)
+bool setupDTrace(unsigned int rate, NetUuidData *data)
 {
 	int err;
 
@@ -83,7 +83,7 @@ bool setupDTrace(unsigned int rate)
 	(void) dtrace_setopt(g_dtp, "bufsize", "4m");
 	(void) dtrace_setopt(g_dtp, "aggsize", "4m");
 	//(void) dtrace_setopt(g_dtp, "switchrate", std::to_string(rate) + "ms");
-	dtrace_handle_buffered(g_dtp, &buf_read, NULL);
+	dtrace_handle_buffered(g_dtp, &buf_read, (void *)data);
 	printf("dtrace options set\n");
 	return true;
 }
