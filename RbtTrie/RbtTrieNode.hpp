@@ -154,7 +154,7 @@ public:
 	}
 
 	KE getKeyEntry() { return keyEntry; }
-	bool matchesKeySuffix(KE key[], unsigned int length)
+	bool matchesKeySuffix(const KE key[], unsigned int length)
 	{
 		if (!flags.isLeaf || length != flags.suffixLen)
 			return false;

@@ -28,7 +28,7 @@ public:
 		head = NULL;
 	}
 
-	bool insert(KE key[], unsigned int length, V *val) {
+	bool insert(const KE key[], unsigned int length, V *val) {
 		// The trivial case, we can fit the entire key in the head
 		if (head == NULL)
 		{
@@ -42,7 +42,7 @@ public:
 		// Key already exists (or is a prefix of one which exists)
 		if (len == 0)
 			return false;
-		KE *keySuffix = &key[length - len];
+		const KE *keySuffix = &key[length - len];
 
 		if (node->isLeaf())
 		{
@@ -100,7 +100,7 @@ public:
 		return false;
 	}
 
-	V *get(KE key[], unsigned int length) {
+	V *get(const KE key[], unsigned int length) {
 		unsigned int matchLength = length;
 		pNode match = findClosestMatch(key, &matchLength);
 		if (matchLength != 0)
@@ -109,7 +109,7 @@ public:
 	}
 
 	template <typename OutputIterator>
-	void getKeysWithPrefix(KE prefix[], unsigned int length,
+	void getKeysWithPrefix(const KE prefix[], unsigned int length,
 			OutputIterator out)
 	{
 		unsigned int matchLength = length;
@@ -220,7 +220,7 @@ private:
 		*((*out)++) = key;
 	}
 
-	pNode findClosestMatch(KE key[], unsigned int *plength)
+	pNode findClosestMatch(const KE key[], unsigned int *plength)
 	{
 		if (head == NULL)
 			return NULL;
@@ -264,8 +264,8 @@ private:
 		return node;
 	}
 
-	pNode buildLinearTrie(KE key[], unsigned int length,
-					unsigned int suffixLength, V *val)
+	pNode buildLinearTrie(const KE key[], unsigned int length,
+					      unsigned int suffixLength, V *val)
 	{
 		unsigned int i;
 		if (suffixLength <= length && suffixLength <= 63)
