@@ -121,11 +121,25 @@ public:
 			&RbtTrie<KE, V>::getKeysWithPrefixTraverseAction, &out);
 	}
 
+	template <typename OutputIterator>
+	void getValuesWithKeyPrefix(const KE prefix[], unsigned int length,
+			OutputIterator out)
+	{
+		unsigned int matchLength = length;
+		pNode match = findClosestMatch(prefix, &matchLength);
+		if (matchLength != 0)
+			return;
+
+		inOrderTraverse(match, prefix, length, length,
+			&RbtTrie<KE, V>::getValuesWithKeyPrefixTraverseAction,
+			&out);
+	}
+
 private:
 	template <typename T>
 	void inOrderTraverse(pNode start, KE prefix[],
 			unsigned int prefixLength, unsigned int prefixAlloc,
-			void (*action)(T *, tKey), T *obj)
+			void (*action)(T *, tKey, V *), T *obj)
 	{
 		if (start == NULL)
 			return;
@@ -137,7 +151,9 @@ private:
 			KE *key = new KE[prefixLength + suffixLength];
 			memcpy(key, prefix, prefixLength);
 			memcpy(&key[prefixLength], suffix, suffixLength);
-			action(obj, tKey(key, prefixLength + suffixLength));
+			action(obj,
+					tKey(key, prefixLength + suffixLength),
+					start->getPayload());
 			delete[] suffix;
 			return;
 		}
@@ -215,9 +231,16 @@ private:
 
 	template <typename OutputIterator>
 	static void getKeysWithPrefixTraverseAction(OutputIterator *out,
-			tKey key)
+			tKey key, V *value)
 	{
 		*((*out)++) = key;
+	}
+
+	template <typename OutputIterator>
+	static void getValuesWithKeyPrefixTraverseAction(OutputIterator *out,
+			tKey key, V *value)
+	{
+		*((*out)++) = value;
 	}
 
 	pNode findClosestMatch(const KE key[], unsigned int *plength)
