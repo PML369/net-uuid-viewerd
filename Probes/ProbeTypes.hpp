@@ -3,14 +3,18 @@
 
 #include "ProbeType.hpp"
 
-class Probe_trace_start : public ProbeType
-{
-public:
-	std::string getDScript();
-	std::string getBufferPrefix();
-	void	    processBuffer(std::stringstream&, NetUuidData *);
-};
-/*net_uuid:packet::trace-stop
+#define PROBETYPE(p) \
+class p : public ProbeType \
+{ \
+public: \
+	std::string getDScript(); \
+	std::string getBufferPrefix(); \
+	void	    processBuffer(std::stringstream&, NetUuidData *); \
+}
+
+PROBETYPE(Probe_trace_start);
+PROBETYPE(Probe_trace_stop);
+/*
 net_uuid:mem::alloc
 net_uuid:packet::fragment
 net_uuid:packet::from-socket

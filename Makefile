@@ -6,16 +6,18 @@ BINDIR = .
 .endif
 
 
-PROBES = trace_start
+PROBES = trace_start trace_stop
 CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
 	net-uuid-viewerd.cpp \
-	dtrace_import.cpp
+	dtrace_import.cpp \
+	PacketInfo.cpp
 
 DEPDIR = .d
 INCLUDE = -I $(USR_SRC)/cddl/compat/opensolaris/include/ \
 		-I $(USR_SRC)/cddl/contrib/opensolaris/lib/libdtrace/common/ \
 		-I $(USR_SRC)/sys/cddl/compat/opensolaris/ \
 		-I $(USR_SRC)/sys/cddl/contrib/opensolaris/uts/common/ \
+		-I .
 
 DEPFLAGS = -MD
 

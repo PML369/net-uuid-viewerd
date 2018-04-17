@@ -4,7 +4,9 @@
 #include <vector>
 #include <sstream>
 
-std::vector<ProbeType *> probes = { new Probe_trace_start() };
+std::vector<ProbeType *> probes = { new Probe_trace_start(),
+				    new Probe_trace_stop()
+				};
 
 static dtrace_hdl_t* g_dtp;
 
@@ -34,10 +36,6 @@ static int buf_read(const dtrace_bufdata_t *buf, void *arg)
 #define LONG_STRING_LITERAL(...) #__VA_ARGS__
 static const char* g_prog = LONG_STRING_LITERAL(
 
-net_uuid:packet::trace-stop
-{
-	printf("trace-stop %s %d", stringof(arg0), timestamp);
-}
 net_uuid:mem::alloc
 {
 	printf("alloc %s %p", stringof(arg0), arg1);
