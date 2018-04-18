@@ -10,7 +10,8 @@ PROBES = trace_start trace_stop
 CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
 	net-uuid-viewerd.cpp \
 	dtrace_import.cpp \
-	PacketInfo.cpp
+	PacketInfo.cpp \
+	NetUuidData.cpp \
 
 DEPDIR = .d
 INCLUDE = -I $(USR_SRC)/cddl/compat/opensolaris/include/ \
