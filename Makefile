@@ -7,7 +7,9 @@ BINDIR = .
 
 
 PROBES = trace_start trace_stop
+COMMANDS = dump_data
 CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
+	$(COMMANDS:%=Commands/Command_%.cpp) \
 	net-uuid-viewerd.cpp \
 	dtrace_import.cpp \
 	PacketInfo.cpp \
