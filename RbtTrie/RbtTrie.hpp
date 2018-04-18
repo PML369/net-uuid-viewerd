@@ -245,14 +245,16 @@ private:
 	static void getKeysWithPrefixTraverseAction(OutputIterator *out,
 			tKey key, V *value)
 	{
-		*((*out)++) = key;
+		**out = key;
+		(*out)++;
 	}
 
 	template <typename OutputIterator>
 	static void getValuesWithKeyPrefixTraverseAction(OutputIterator *out,
 			tKey key, V *value)
 	{
-		*((*out)++) = value;
+		**out = value;
+		(*out)++;
 	}
 
 	pNode findClosestMatch(const KE key[], unsigned int *plength)
