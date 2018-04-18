@@ -34,3 +34,4 @@
 # Test imtermediates
 test/*Test.cpp
 test/runner.cpp
+net-uuid-viewerd
