@@ -11,5 +11,7 @@ void
 Command_dump_data::execute(std::stringstream& sstream, std::string& out,
 				NetUuidData *data)
 {
-	out += "Hello world";
+	out += "Hello world: \n";
+	out += sstream.str();
+	out += "\n";
 }

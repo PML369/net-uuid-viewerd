@@ -13,6 +13,7 @@ CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
 	net-uuid-viewerd.cpp \
 	dtrace_import.cpp \
 	PacketInfo.cpp \
+	RequestHandler.cpp \
 	NetUuidData.cpp \
 
 DEPDIR = .d
