@@ -117,7 +117,7 @@ public:
 		if (matchLength != 0)
 			return;
 
-		inOrderTraverse(match, prefix, length, length,
+		inOrderTraverse(match, prefix, length,
 			&RbtTrie<KE, V>::getKeysWithPrefixTraverseAction, &out);
 	}
 
@@ -130,14 +130,26 @@ public:
 		if (matchLength != 0)
 			return;
 
-		inOrderTraverse(match, prefix, length, length,
+		inOrderTraverse(match, prefix, length,
 			&RbtTrie<KE, V>::getValuesWithKeyPrefixTraverseAction,
 			&out);
 	}
 
 private:
 	template <typename T>
-	void inOrderTraverse(pNode start, KE prefix[],
+	void inOrderTraverse(pNode start, const KE prefix[],
+			unsigned int prefixLength,
+			void (*action)(T *, tKey, V *), T *obj)
+	{
+		unsigned int prefixAlloc = 2 * prefixLength;
+		KE *newPrefix = new KE[prefixAlloc];
+		memcpy(newPrefix, prefix, prefixLength * sizeof(KE));
+		inOrderTraverseInternal(start, newPrefix, prefixLength,
+						prefixAlloc, action, obj);
+	}
+
+	template <typename T>
+	void inOrderTraverseInternal(pNode start, KE prefix[],
 			unsigned int prefixLength, unsigned int prefixAlloc,
 			void (*action)(T *, tKey, V *), T *obj)
 	{
@@ -185,7 +197,7 @@ private:
 					{
 						prefix[prefixLength] =
 							n->getKeyEntry();
-						inOrderTraverse(
+						inOrderTraverseInternal(
 							n->getChild(),
 							prefix,
 							prefixLength + 1,
@@ -200,7 +212,7 @@ private:
 								prefixLength);
 						newPrefix[prefixLength] =
 							n->getKeyEntry();
-						inOrderTraverse(
+						inOrderTraverseInternal(
 							n->getChild(),
 							newPrefix,
 							prefixLength + 1,
