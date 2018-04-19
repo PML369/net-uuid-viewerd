@@ -5,7 +5,8 @@
 #include <sstream>
 
 std::vector<ProbeType *> probes = { new Probe_trace_start(),
-				    new Probe_trace_stop()
+				    new Probe_trace_stop(),
+				    new Probe_mem_alloc()
 				};
 
 static dtrace_hdl_t* g_dtp;
@@ -36,10 +37,6 @@ static int buf_read(const dtrace_bufdata_t *buf, void *arg)
 #define LONG_STRING_LITERAL(...) #__VA_ARGS__
 static const char* g_prog = LONG_STRING_LITERAL(
 
-net_uuid:mem::alloc
-{
-	printf("alloc %s %p", stringof(arg0), arg1);
-}
 net_uuid:packet::fragment
 {
 	printf("fragment %s %s", stringof(arg0), stringof(arg1));

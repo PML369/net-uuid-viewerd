@@ -14,8 +14,8 @@ public: \
 
 PROBETYPE(Probe_trace_start);
 PROBETYPE(Probe_trace_stop);
+PROBETYPE(Probe_mem_alloc);
 /*
-net_uuid:mem::alloc
 net_uuid:packet::fragment
 net_uuid:packet::from-socket
 net_uuid:packet::to-socket

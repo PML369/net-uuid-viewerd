@@ -6,7 +6,7 @@ BINDIR = .
 .endif
 
 
-PROBES = trace_start trace_stop
+PROBES = trace_start trace_stop mem_alloc
 COMMANDS = dump_data
 CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
 	$(COMMANDS:%=Commands/Command_%.cpp) \
@@ -15,6 +15,7 @@ CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
 	PacketInfo.cpp \
 	RequestHandler.cpp \
 	NetUuidData.cpp \
+	Probes/ProbeType.cpp \
 
 DEPDIR = .d
 INCLUDE = -I $(USR_SRC)/cddl/compat/opensolaris/include/ \
