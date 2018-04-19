@@ -42,12 +42,10 @@ Command_dump_data::execute(std::stringstream& sstream, std::string& out,
 				itp != p->addresses.end(); ++itp)
 		{
 			if (doneFirst)
-			{
 				out += ", ";
-				doneFirst = true;
-			}
 			snprintf(addrbuf, sizeof(void*) * 2 + 3, "%p", *itp);
 			out.append(addrbuf);
+			doneFirst = true;
 		}
 		out += "]]\n";
 	}
