@@ -34,6 +34,11 @@ Command_dump_data::execute(std::stringstream& sstream, std::string& out,
 			out += ", deleted=";
 			out += std::to_string(p->timeDeleted);
 		}
+		if (p->wasDropped)
+		{
+			out += ", droppedAt=";
+			out += std::to_string(p->timeDropped);
+		}
 		out += ", address=[";
 		bool doneFirst = false;
 		char addrbuf[sizeof(void*) * 2 + 3];

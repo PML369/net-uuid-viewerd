@@ -4,4 +4,5 @@ PacketInfo::PacketInfo()
 {
 	hasTimeCreated = false;
 	hasTimeDeleted = false;
+	wasDropped = false;
 }

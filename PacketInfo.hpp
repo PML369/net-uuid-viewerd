@@ -14,9 +14,11 @@ public:
 
 	timestamp_t timeCreated;
 	timestamp_t timeDeleted;
+	timestamp_t timeDropped;
 
 	bool hasTimeCreated : 1;
 	bool hasTimeDeleted : 1;
+	bool wasDropped	    : 1;
 
 	PacketInfo();
 };

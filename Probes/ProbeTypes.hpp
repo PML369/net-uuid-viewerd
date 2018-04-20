@@ -15,11 +15,11 @@ public: \
 PROBETYPE(Probe_trace_start);
 PROBETYPE(Probe_trace_stop);
 PROBETYPE(Probe_mem_alloc);
+PROBETYPE(Probe_drop);
 /*
 net_uuid:packet::fragment
 net_uuid:packet::from-socket
 net_uuid:packet::to-socket
-net_uuid:packet::to-subsys
-net_uuid:packet::drop*/
+net_uuid:packet::to-subsys*/
 
 #endif /*PROBETYPES_HPP*/

@@ -6,7 +6,8 @@
 
 std::vector<ProbeType *> probes = { new Probe_trace_start(),
 				    new Probe_trace_stop(),
-				    new Probe_mem_alloc()
+				    new Probe_mem_alloc(),
+				    new Probe_drop()
 				};
 
 static dtrace_hdl_t* g_dtp;
@@ -52,10 +53,6 @@ net_uuid:packet::to-socket
 net_uuid:packet::to-subsys
 {
 	printf("to-subsys %s %s", stringof(arg0), stringof(arg1));
-}
-net_uuid:packet::drop
-{
-	printf("drop %s %d", stringof(arg0), timestamp);
 }
 
 );
