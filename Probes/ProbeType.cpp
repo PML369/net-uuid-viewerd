@@ -1,5 +1,4 @@
 #include "ProbeType.hpp"
-#include "NetUuidData.hpp"
 #include "PacketInfo.hpp"
 
 PacketInfo *
@@ -27,15 +26,25 @@ ProbeType::getOrCreateEntry(std::string &uuid, NetUuidData *data)
 	return pkt;
 }
 
-std::vector<PacketInfo *> *
+NetUuidData::infolist_t *
 ProbeType::getOrCreateAddressVector(std::string &address, NetUuidData *data)
 {
-	std::vector<PacketInfo *> *vec = data->addrTrie.get(address.c_str(),
-							    address.length());
+	return getOrCreatePacketInfoVector(address, &data->addrTrie);
+}
+NetUuidData::infolist_t *
+ProbeType::getOrCreateSocketVector(std::string &address, NetUuidData *data)
+{
+	return getOrCreatePacketInfoVector(address, &data->socketTrie);
+}
+NetUuidData::infolist_t *
+ProbeType::getOrCreatePacketInfoVector(std::string &key,
+			RbtTrie<char, NetUuidData::infolist_t> *trie)
+{
+	NetUuidData::infolist_t *vec = trie->get(key.c_str(), key.length());
 	if (vec != NULL)
 		return vec;
 
-	vec = new std::vector<PacketInfo *>();
-	data->addrTrie.insert(address.c_str(), address.length(), vec);
+	vec = new NetUuidData::infolist_t();
+	trie->insert(key.c_str(), key.length(), vec);
 	return vec;
 }

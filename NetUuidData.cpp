@@ -1,5 +1,5 @@
 #include "NetUuidData.hpp"
 
-NetUuidData::NetUuidData() : uuidTrie(), addrTrie()
+NetUuidData::NetUuidData() : uuidTrie(), addrTrie(), socketTrie()
 {
 }

@@ -4,9 +4,10 @@
 #include <string>
 #include <sstream>
 
+#include <NetUuidData.hpp>
+
 #define LONG_STRING_LITERAL(...) #__VA_ARGS__
 
-class NetUuidData;
 class PacketInfo;
 
 class ProbeType
@@ -16,9 +17,14 @@ public:
 	virtual std::string getBufferPrefix() = 0;
 	virtual void	    processBuffer(std::stringstream&, NetUuidData *) =0;
 protected:
-	PacketInfo *	    getOrCreateEntry(std::string &, NetUuidData *);
-	std::vector<PacketInfo *> *getOrCreateAddressVector(std::string &,
+	PacketInfo *	         getOrCreateEntry(std::string &, NetUuidData *);
+	NetUuidData::infolist_t *getOrCreateAddressVector(std::string &,
 								NetUuidData *);
+	NetUuidData::infolist_t *getOrCreateSocketVector(std::string &,
+								NetUuidData *);
+private:
+	NetUuidData::infolist_t *getOrCreatePacketInfoVector(std::string &,
+				RbtTrie<char, NetUuidData::infolist_t> *trie);
 };
 
 #endif /*PROBETYPE_HPP*/
