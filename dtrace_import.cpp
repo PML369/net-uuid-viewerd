@@ -40,14 +40,7 @@ static int buf_read(const dtrace_bufdata_t *buf, void *arg)
 	return 0;
 }
 
-#define LONG_STRING_LITERAL(...) #__VA_ARGS__
-static const char* g_prog = LONG_STRING_LITERAL(
-
-
-);
-
 int applicationInterrupted;
-
 
 bool setupDTrace(unsigned int rate, NetUuidData *data)
 {
@@ -71,7 +64,7 @@ bool setupDTrace(unsigned int rate, NetUuidData *data)
 
 bool installProbes(void)
 {
-	std::string dScript(g_prog);
+	std::string dScript;
 	for (std::vector<ProbeType *>::iterator it = probes.begin();
 			it != probes.end(); ++it)
 		dScript += (*it)->getDScript();
