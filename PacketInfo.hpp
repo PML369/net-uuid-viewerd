@@ -24,6 +24,11 @@ public:
 	bool hasSocketTo    : 1;
 
 	PacketInfo();
+	void setUuid(std::string &);
+	void setSocket(std::string &);
+	void pushAddress(std::string &);
+private:
+	void stringToUuid(char *, std::string &);
 };
 
 #endif /*PACKET_INFO_HPP*/
