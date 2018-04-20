@@ -37,9 +37,8 @@ Probe_trace_start::processBuffer(std::stringstream &buffer, NetUuidData *data)
 	pkt->hasTimeCreated = true;
 	pkt->pushAddress(address);
 
-	std::vector<PacketInfo *> *vec = getOrCreateAddressVector(address,
-									data);
-	vec->push_back(pkt);
+	getOrCreateAddressVector(address, data)
+		->push_back(pkt);
 
 	std::cout << "id=" << uuid << " t=" << timestamp << " addr=" << address << std::endl;
 }
