@@ -17,6 +17,8 @@ public:
 	timestamp_t timeDropped;
 	char socketUuid[36];
 
+	std::vector<std::string> subsystemsTouched;
+
 	bool hasTimeCreated : 1;
 	bool hasTimeDeleted : 1;
 	bool wasDropped	    : 1;

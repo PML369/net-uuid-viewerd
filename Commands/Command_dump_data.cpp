@@ -48,6 +48,19 @@ Command_dump_data::execute(std::stringstream& sstream, std::string& out,
 			else
 				out += ", hasSocketTo";
 		}
+		if (!p->subsystemsTouched.empty())
+		{
+			out += "subsystems=[";
+			bool doneFirst = false;
+			for (std::vector<std::string>::iterator it =
+					p->subsystemsTouched.begin();
+					it != p->subsystemsTouched.end(); ++it)
+			{
+				out += (doneFirst ? ", " : "") + *it;
+				doneFirst = true;
+			}
+			out += "]";
+		}
 		out += ", address=[";
 		bool doneFirst = false;
 		char addrbuf[sizeof(void*) * 2 + 3];

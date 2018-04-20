@@ -10,7 +10,8 @@ std::vector<ProbeType *> probes = { new Probe_trace_start(),
 				    new Probe_drop(),
 				    new Probe_socket_create(),
 				    new Probe_from_socket(),
-				    new Probe_to_socket()
+				    new Probe_to_socket(),
+				    new Probe_to_subsys()
 				};
 
 static dtrace_hdl_t* g_dtp;
@@ -44,10 +45,6 @@ static const char* g_prog = LONG_STRING_LITERAL(
 net_uuid:packet::fragment
 {
 	printf("fragment %s %s", stringof(arg0), stringof(arg1));
-}
-net_uuid:packet::to-subsys
-{
-	printf("to-subsys %s %s", stringof(arg0), stringof(arg1));
 }
 
 );

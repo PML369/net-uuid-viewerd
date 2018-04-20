@@ -19,8 +19,9 @@ PROBETYPE(Probe_drop);
 PROBETYPE(Probe_socket_create);
 PROBETYPE(Probe_from_socket);
 PROBETYPE(Probe_to_socket);
+PROBETYPE(Probe_to_subsys);
 /*
 net_uuid:packet::fragment
-net_uuid:packet::to-subsys*/
+*/
 
 #endif /*PROBETYPES_HPP*/
