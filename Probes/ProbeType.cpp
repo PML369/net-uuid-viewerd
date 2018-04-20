@@ -21,6 +21,7 @@ ProbeType::getOrCreateEntry(std::string &uuid, NetUuidData *data)
 		return pkt;
 
 	pkt = new PacketInfo();
+	pkt->setUuid(uuid);
 	data->uuidTrie.insert(uuid.c_str(), uuid.length(), pkt);
 	data->uuidCacheMap.emplace(uuid, pkt);
 	return pkt;
