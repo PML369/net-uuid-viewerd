@@ -27,10 +27,7 @@ Probe_mem_alloc::processBuffer(std::stringstream &buffer, NetUuidData *data)
 	std::getline(buffer, address, ' ');
 
 	PacketInfo *pkt = getOrCreateEntry(uuid, data);
-
-	void *addr;
-	sscanf(address.c_str(), "%p", &addr);
-	pkt->addresses.push_back(addr);
+	pkt->pushAddress(address);
 
 	std::vector<PacketInfo *> *vec = getOrCreateAddressVector(address,data);
 	vec->push_back(pkt);

@@ -32,25 +32,13 @@ Probe_trace_start::processBuffer(std::stringstream &buffer, NetUuidData *data)
 	std::getline(buffer, timestamp, ' ');
 	std::getline(buffer, address, ' ');
 
-	PacketInfo *pkt = new PacketInfo();
-
-	memcpy(pkt->uuid, uuid.c_str(), std::max((size_t)36, uuid.length()));
+	PacketInfo *pkt = getOrCreateEntry(uuid, data);
 	pkt->timeCreated = stoll(timestamp);
 	pkt->hasTimeCreated = true;
+	pkt->pushAddress(address);
 
-	void *addr;
-	sscanf(address.c_str(), "%p", &addr);
-	pkt->addresses.push_back(addr);
-
-	data->uuidTrie.insert(uuid.c_str(), uuid.length(), pkt);
-	data->uuidCacheMap.emplace(uuid, pkt);
-
-	std::vector<PacketInfo *> *vec = data->addrTrie.get(address.c_str(), address.length());
-	if (vec == NULL)
-	{
-		vec = new std::vector<PacketInfo *>();
-		data->addrTrie.insert(address.c_str(), address.length(), vec);
-	}
+	std::vector<PacketInfo *> *vec = getOrCreateAddressVector(address,
+									data);
 	vec->push_back(pkt);
 
 	std::cout << "id=" << uuid << " t=" << timestamp << " addr=" << address << std::endl;
