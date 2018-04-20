@@ -54,5 +54,27 @@ Command_dump_data::execute(std::stringstream& sstream, std::string& out,
 		}
 		out += "]]\n";
 	}
+
+	for (std::multimap<std::string, pid_t>::iterator it =
+			data->procNamePidMap.begin();
+			it != data->procNamePidMap.end(); ++it)
+	{
+		out += "[proc=\"";
+		out += it->first;
+		out += "\", pid=";
+		out += std::to_string(it->second);
+		out += "]\n";
+	}
+	for (std::multimap<pid_t, std::string>::iterator it =
+			data->pidSocketMap.begin();
+			it != data->pidSocketMap.end(); ++it)
+	{
+		out += "[pid=";
+		out += std::to_string(it->first);
+		out += ", socket=";
+		out += it->second;
+		out += "]\n";
+	}
+
 	out += "\n";
 }

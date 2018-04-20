@@ -7,7 +7,8 @@
 std::vector<ProbeType *> probes = { new Probe_trace_start(),
 				    new Probe_trace_stop(),
 				    new Probe_mem_alloc(),
-				    new Probe_drop()
+				    new Probe_drop(),
+				    new Probe_socket_create()
 				};
 
 static dtrace_hdl_t* g_dtp;

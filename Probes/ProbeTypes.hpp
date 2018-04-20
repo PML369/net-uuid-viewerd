@@ -16,6 +16,7 @@ PROBETYPE(Probe_trace_start);
 PROBETYPE(Probe_trace_stop);
 PROBETYPE(Probe_mem_alloc);
 PROBETYPE(Probe_drop);
+PROBETYPE(Probe_socket_create);
 /*
 net_uuid:packet::fragment
 net_uuid:packet::from-socket
