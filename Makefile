@@ -6,7 +6,8 @@ BINDIR = .
 .endif
 
 
-PROBES = trace_start trace_stop mem_alloc drop socket_create
+PROBES = trace_start trace_stop mem_alloc drop socket_create from_socket \
+	 to_socket
 COMMANDS = dump_data
 CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
 	$(COMMANDS:%=Commands/Command_%.cpp) \

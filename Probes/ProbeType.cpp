@@ -32,9 +32,9 @@ ProbeType::getOrCreateAddressVector(std::string &address, NetUuidData *data)
 	return getOrCreatePacketInfoVector(address, &data->addrTrie);
 }
 NetUuidData::infolist_t *
-ProbeType::getOrCreateSocketVector(std::string &address, NetUuidData *data)
+ProbeType::getOrCreateSocketVector(std::string &socket, NetUuidData *data)
 {
-	return getOrCreatePacketInfoVector(address, &data->socketTrie);
+	return getOrCreatePacketInfoVector(socket, &data->socketTrie);
 }
 NetUuidData::infolist_t *
 ProbeType::getOrCreatePacketInfoVector(std::string &key,

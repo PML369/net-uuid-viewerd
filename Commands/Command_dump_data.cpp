@@ -39,6 +39,15 @@ Command_dump_data::execute(std::stringstream& sstream, std::string& out,
 			out += ", droppedAt=";
 			out += std::to_string(p->timeDropped);
 		}
+		if (p->hasSocketFrom || p->hasSocketTo)
+		{
+			out += ", socket=";
+			out.append(p->socketUuid, 36);
+			if (p->hasSocketFrom)
+				out += ", hasSocketFrom";
+			else
+				out += ", hasSocketTo";
+		}
 		out += ", address=[";
 		bool doneFirst = false;
 		char addrbuf[sizeof(void*) * 2 + 3];

@@ -17,10 +17,10 @@ PROBETYPE(Probe_trace_stop);
 PROBETYPE(Probe_mem_alloc);
 PROBETYPE(Probe_drop);
 PROBETYPE(Probe_socket_create);
+PROBETYPE(Probe_from_socket);
+PROBETYPE(Probe_to_socket);
 /*
 net_uuid:packet::fragment
-net_uuid:packet::from-socket
-net_uuid:packet::to-socket
 net_uuid:packet::to-subsys*/
 
 #endif /*PROBETYPES_HPP*/
