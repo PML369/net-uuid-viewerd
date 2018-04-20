@@ -15,10 +15,13 @@ public:
 	timestamp_t timeCreated;
 	timestamp_t timeDeleted;
 	timestamp_t timeDropped;
+	char socketUuid[36];
 
 	bool hasTimeCreated : 1;
 	bool hasTimeDeleted : 1;
 	bool wasDropped	    : 1;
+	bool hasSocketFrom  : 1;
+	bool hasSocketTo    : 1;
 
 	PacketInfo();
 };
