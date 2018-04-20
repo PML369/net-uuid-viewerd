@@ -10,14 +10,15 @@ public:
 	typedef uint64_t timestamp_t;
 
 	char uuid[36];
+	char socketUuid[36];
 	std::vector<void *> addresses;
+	std::vector<std::string> subsystemsTouched;
+	std::vector<PacketInfo *> fragments;
+	PacketInfo *fragmentOf;
 
 	timestamp_t timeCreated;
 	timestamp_t timeDeleted;
 	timestamp_t timeDropped;
-	char socketUuid[36];
-
-	std::vector<std::string> subsystemsTouched;
 
 	bool hasTimeCreated : 1;
 	bool hasTimeDeleted : 1;

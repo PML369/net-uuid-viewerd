@@ -3,6 +3,7 @@
 
 PacketInfo::PacketInfo()
 {
+	fragmentOf = NULL;
 	hasTimeCreated = false;
 	hasTimeDeleted = false;
 	wasDropped = false;
