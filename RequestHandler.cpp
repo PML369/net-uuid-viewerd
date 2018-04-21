@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <sstream>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <sys/time.h>
 #include <sys/un.h>
 #include <thread>
@@ -43,7 +44,8 @@ RequestHandler::RequestHandler(unsigned int listenTimeout, NetUuidData *data)
 }
 
 bool
-RequestHandler::setupUnixSocket(std::string const& socketPath)
+RequestHandler::setupUnixSocket(std::string const& socketPath,
+					uid_t uid, gid_t gid, mode_t mode)
 {
 	if (listening)
 		return false;
@@ -64,6 +66,9 @@ RequestHandler::setupUnixSocket(std::string const& socketPath)
 	int ret = bind(listenSocket, (struct sockaddr *)&path, sizeof(path));
 	if (ret != 0)
 		return false;
+
+	chown(socketPath.c_str(), uid, gid);
+	chmod(socketPath.c_str(), mode);
 
 	ret = listen(listenSocket, MAX_WAITING_CONNECTIONS);
 	listening = (ret == 0);

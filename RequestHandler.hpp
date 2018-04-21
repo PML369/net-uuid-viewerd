@@ -7,7 +7,7 @@ class RequestHandler
 {
 public:
 	RequestHandler(unsigned int listenTimeout, NetUuidData *data);
-	bool setupUnixSocket(std::string const& socketPath);
+	bool setupUnixSocket(std::string const& path, uid_t, gid_t, mode_t);
 	void processRequestsFromSocket(void);
 	~RequestHandler();
 
