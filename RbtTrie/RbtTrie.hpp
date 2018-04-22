@@ -112,27 +112,32 @@ public:
 	void getKeysWithPrefix(const KE prefix[], unsigned int length,
 			OutputIterator out)
 	{
-		unsigned int matchLength = length;
-		pNode match = findClosestMatch(prefix, &matchLength);
-		if (matchLength != 0)
-			return;
-
-		inOrderTraverse(match, prefix, length,
-			&RbtTrie<KE, V>::getKeysWithPrefixTraverseAction, &out);
+		getDataWithKeyPrefix<tKey>(prefix, length, out,
+					[](tKey key, V *val) { return key; });
 	}
 
 	template <typename OutputIterator>
 	void getValuesWithKeyPrefix(const KE prefix[], unsigned int length,
 			OutputIterator out)
 	{
+		getDataWithKeyPrefix<V *>(prefix, length, out,
+					[](tKey key, V *val) { return val; });
+	}
+
+	template <typename value_type, typename OutputIterator>
+	void getDataWithKeyPrefix(const KE prefix[], unsigned int length,
+			OutputIterator out, value_type(*callback)(tKey, V *))
+	{
 		unsigned int matchLength = length;
 		pNode match = findClosestMatch(prefix, &matchLength);
 		if (matchLength != 0)
 			return;
 
+		auto params = std::make_pair(callback, out);
+
 		inOrderTraverse(match, prefix, length,
-			&RbtTrie<KE, V>::getValuesWithKeyPrefixTraverseAction,
-			&out);
+			&RbtTrie<KE, V>::getDataWithKeyPrefixTraverseAction,
+			&params);
 	}
 
 private:
@@ -243,20 +248,12 @@ private:
 		}
 	}
 
-	template <typename OutputIterator>
-	static void getKeysWithPrefixTraverseAction(OutputIterator *out,
+	template <typename OutputPair>
+	static void getDataWithKeyPrefixTraverseAction(OutputPair *out,
 			tKey key, V *value)
 	{
-		**out = key;
-		(*out)++;
-	}
-
-	template <typename OutputIterator>
-	static void getValuesWithKeyPrefixTraverseAction(OutputIterator *out,
-			tKey key, V *value)
-	{
-		**out = value;
-		(*out)++;
+		*(out->second) = (out->first)(key, value);
+		(out->second)++;
 	}
 
 	pNode findClosestMatch(const KE key[], unsigned int *plength)

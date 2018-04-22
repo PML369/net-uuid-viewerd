@@ -9,7 +9,7 @@ INCLUDE = -I$(CXXTESTINCLUDE) -I..
 
 DEPFLAGS = -MD
 
-COMPILE.cpp = c++ -g $(DEPFLAGS) $(INCLUDE) -c
+COMPILE.cpp = c++ -g $(DEPFLAGS) $(INCLUDE) -std=c++11 -c
 POSTCOMPILE = @mv -f $*.d $(DEPDIR)/$*.d && touch $@
 
 build: runRbtTrieTest.out
