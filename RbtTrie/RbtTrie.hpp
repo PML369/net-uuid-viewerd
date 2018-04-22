@@ -142,6 +142,8 @@ private:
 			void (*action)(T *, tKey, V *), T *obj)
 	{
 		unsigned int prefixAlloc = 2 * prefixLength;
+		if (prefixAlloc == 0)
+			prefixAlloc = 2;
 		KE *newPrefix = new KE[prefixAlloc];
 		memcpy(newPrefix, prefix, prefixLength * sizeof(KE));
 		inOrderTraverseInternal(start, newPrefix, prefixLength,
