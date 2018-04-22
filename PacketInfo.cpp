@@ -7,6 +7,8 @@ PacketInfo::PacketInfo()
 	hasTimeCreated = false;
 	hasTimeDeleted = false;
 	wasDropped = false;
+	hasSocketFrom = false;
+	hasSocketTo = false;
 }
 void
 PacketInfo::setUuid(std::string &str)
@@ -21,7 +23,7 @@ PacketInfo::setSocket(std::string &str)
 void
 PacketInfo::stringToUuid(char *uuid, std::string &str)
 {
-	memcpy(uuid, str.c_str(), std::max((size_t)36, str.length()));
+	memcpy(uuid, str.c_str(), std::min((size_t)36, str.length()));
 }
 void
 PacketInfo::pushAddress(std::string &str)
