@@ -28,7 +28,6 @@ static int chewrec (const dtrace_probedata_t *data,
 
 static int buf_read(const dtrace_bufdata_t *buf, void *arg)
 {
-	printf("%s\n", buf->dtbda_buffered);
 	std::stringstream sstream(buf->dtbda_buffered);
 	std::string prefix;
 	std::getline(sstream, prefix, ' ');

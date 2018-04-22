@@ -1,6 +1,5 @@
 #include "ProbeTypes.hpp"
 
-#include <iostream>
 #include <algorithm>
 #include <string>
 
@@ -38,6 +37,4 @@ Probe_trace_start::processBuffer(std::stringstream &buffer, NetUuidData *data)
 
 	getOrCreateAddressVector(address, data)
 		->push_back(pkt);
-
-	std::cout << "id=" << uuid << " t=" << timestamp << " addr=" << address << std::endl;
 }
