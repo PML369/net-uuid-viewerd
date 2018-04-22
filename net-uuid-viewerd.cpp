@@ -1,6 +1,10 @@
 #include <signal.h>
+#include <sys/stat.h> // For S_IRUSR etc
 #include "dtrace_import.hpp"
 #include "RequestHandler.hpp"
+
+#define S_GID 80 /*www - for apache*/
+#define S_MODE S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP
 
 static void intr (int signo)
 {
@@ -29,7 +33,7 @@ int main (int argc, char** argv)
 	if (!installProbes())
 		return -2;
 
-	if (!handler.setupUnixSocket("/tmp/net-uuid.sock"))
+	if (!handler.setupUnixSocket("/tmp/net-uuid.sock", -1, S_GID, S_MODE))
 	{
 		closeDTrace();
 		return -3;
