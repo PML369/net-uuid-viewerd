@@ -11,29 +11,18 @@
  */
 
 #include <RbtTrie/RbtTrieNode.hpp>
+#include <RbtTrie/SearchableTreeTrie.hpp>
 
 #ifndef TRAVERSABLE_TREE_TRIE_HPP
 #define TRAVERSABLE_TREE_TRIE_HPP
 
 template <typename KE, typename V>
-class TraversableTreeTrie {
+class TraversableTreeTrie : public SearchableTreeTrie<KE, V> {
 	friend class RbtTrieInternalTest;
 protected:
-	typedef RbtTrieNode<KE, V> *pNode;
-	pNode head;
+	typedef typename SearchableTreeTrie<KE, V>::pNode pNode;
 public:
-	typedef std::pair<KE *, unsigned int> tKey;
-	TraversableTreeTrie() {
-		head = NULL;
-	}
-
-	V *get(const KE key[], unsigned int length) {
-		unsigned int matchLength = length;
-		pNode match = findClosestMatch(key, &matchLength);
-		if (matchLength != 0)
-			return NULL;
-		return match->getPayload();
-	}
+	typedef typename SearchableTreeTrie<KE, V>::tKey tKey;
 
 	template <typename OutputIterator>
 	void getKeysWithPrefix(const KE prefix[], unsigned int length,
@@ -56,7 +45,7 @@ public:
 			OutputIterator out, value_type(*callback)(tKey, V *))
 	{
 		unsigned int matchLength = length;
-		pNode match = findClosestMatch(prefix, &matchLength);
+		pNode match = this->findClosestMatch(prefix, &matchLength);
 		if (matchLength != 0)
 			return;
 
@@ -181,50 +170,6 @@ protected:
 	{
 		*(out->second) = (out->first)(key, value);
 		(out->second)++;
-	}
-
-	pNode findClosestMatch(const KE key[], unsigned int *plength)
-	{
-		if (head == NULL)
-			return NULL;
-		pNode node = head;
-		unsigned int index = 0;
-		while (*plength > index)
-		{
-			if (node->isLeaf())
-			{
-				if (node->matchesKeySuffix(&key[index],
-							   *plength-index))
-					*plength = 0;
-				else
-					*plength -= index;
-				return node;
-			}
-			else
-			{
-				KE testKeyEntry = node->getKeyEntry();
-				pNode newNode;
-				if (key[index] < testKeyEntry)
-					newNode = node->getLeft();
-				else if (testKeyEntry < key[index])
-					newNode = node->getRight();
-				else
-				{
-					newNode = node->getChild();
-					index++;
-				}
-
-				if (newNode == NULL)
-				{
-					*plength -= index;
-					return node;
-				}
-				node = newNode;
-			}
-		}
-		// We've consumed all input (perhaps we are prefix matching)
-		*plength = 0;
-		return node;
 	}
 };
 
