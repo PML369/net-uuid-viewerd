@@ -8,7 +8,7 @@ BINDIR = .
 
 PROBES = trace_start trace_stop mem_alloc drop socket_create from_socket \
 	 to_socket to_subsys fragment
-COMMANDS = dump_data
+COMMANDS = dump_data address_heatmap
 CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
 	$(COMMANDS:%=Commands/Command_%.cpp) \
 	net-uuid-viewerd.cpp \

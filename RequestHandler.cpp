@@ -23,7 +23,8 @@
 #define RECV_BUF_LEN 512
 #endif
 
-std::vector<CommandType *> commands = { new Command_dump_data() };
+std::vector<CommandType *> commands = { new Command_dump_data(),
+					new Command_address_heatmap() };
 
 RequestHandler::RequestHandler(unsigned int listenTimeout, NetUuidData *data)
 {

@@ -12,5 +12,6 @@ public: \
 }
 
 COMMANDTYPE(Command_dump_data);
+COMMANDTYPE(Command_address_heatmap);
 
 #endif /*COMMANDTYPES_HPP*/
