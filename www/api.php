@@ -19,7 +19,7 @@ foreach ($cmds[$cmd] as $param => $hasSpaces) {
 		http_response_code(400);
 		exit;
 	}
-	$request .= $_GET['param'] . ($hasSpaces ? '\0' : ' ');
+	$request .= $_GET[$param] . ($hasSpaces ? '\0' : ' ');
 }
 
 $request = strlen($request) . " $request";
