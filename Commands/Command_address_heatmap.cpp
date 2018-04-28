@@ -23,6 +23,9 @@ Command_address_heatmap::execute(std::stringstream& sstream, std::string& out,
 	std::string prefix;
 	std::getline(sstream, prefix, ' ');
 
+	if (prefix.substr(0, 2) == "0x")
+		prefix = prefix.substr(2);
+
 	std::map<std::string, unsigned int> addrData;
 	data->addrTrie.getDataWithKeyPrefix(prefix.c_str(), prefix.length(),
 				std::inserter(addrData, addrData.begin()),
