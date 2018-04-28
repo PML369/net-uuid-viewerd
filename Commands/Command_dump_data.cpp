@@ -39,6 +39,36 @@ Command_dump_data::execute(std::stringstream& sstream, std::string& out,
 			out += ", droppedAt=";
 			out += std::to_string(p->timeDropped);
 		}
+		if (p->hasTimeIpArrive)
+		{
+			out += ", ipArrive=";
+			out += std::to_string(p->timeIpArrive);
+		}
+		if (p->hasTimeIpDepart)
+		{
+			out += ", ipDepart=";
+			out += std::to_string(p->timeIpDepart);
+		}
+		if (p->hasTimeTcpArrive)
+		{
+			out += ", tcpArrive=";
+			out += std::to_string(p->timeTcpArrive);
+		}
+		if (p->hasTimeTcpDepart)
+		{
+			out += ", tcpDepart=";
+			out += std::to_string(p->timeTcpDepart);
+		}
+		if (p->hasTimeUdpArrive)
+		{
+			out += ", udpArrive=";
+			out += std::to_string(p->timeUdpArrive);
+		}
+		if (p->hasTimeUdpDepart)
+		{
+			out += ", udpDepart=";
+			out += std::to_string(p->timeUdpDepart);
+		}
 		if (p->hasSocketFrom || p->hasSocketTo)
 		{
 			out += ", socket=";

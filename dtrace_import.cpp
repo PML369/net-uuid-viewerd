@@ -12,7 +12,9 @@ std::vector<ProbeType *> probes = { new Probe_trace_start(),
 				    new Probe_from_socket(),
 				    new Probe_to_socket(),
 				    new Probe_to_subsys(),
-				    new Probe_fragment()
+				    new Probe_fragment(),
+				    new Probe_layer_arrive(),
+				    new Probe_layer_depart()
 				};
 
 static dtrace_hdl_t* g_dtp;

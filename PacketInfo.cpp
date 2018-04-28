@@ -7,6 +7,12 @@ PacketInfo::PacketInfo()
 	hasTimeCreated = false;
 	hasTimeDeleted = false;
 	wasDropped = false;
+	hasTimeIpArrive = false;
+	hasTimeIpDepart = false;
+	hasTimeTcpArrive = false;
+	hasTimeTcpDepart = false;
+	hasTimeUdpArrive = false;
+	hasTimeUdpDepart = false;
 	hasSocketFrom = false;
 	hasSocketTo = false;
 }

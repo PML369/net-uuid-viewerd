@@ -7,7 +7,7 @@ BINDIR = .
 
 
 PROBES = trace_start trace_stop mem_alloc drop socket_create from_socket \
-	 to_socket to_subsys fragment
+	 to_socket to_subsys fragment layer_arrive layer_depart
 COMMANDS = dump_data address_heatmap
 CPPS = $(PROBES:%=Probes/Probe_%.cpp) \
 	$(COMMANDS:%=Commands/Command_%.cpp) \

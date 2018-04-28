@@ -19,10 +19,22 @@ public:
 	timestamp_t timeCreated;
 	timestamp_t timeDeleted;
 	timestamp_t timeDropped;
+	timestamp_t timeIpArrive;
+	timestamp_t timeIpDepart;
+	timestamp_t timeTcpArrive;
+	timestamp_t timeTcpDepart;
+	timestamp_t timeUdpArrive;
+	timestamp_t timeUdpDepart;
 
 	bool hasTimeCreated : 1;
 	bool hasTimeDeleted : 1;
 	bool wasDropped	    : 1;
+	bool hasTimeIpArrive : 1;
+	bool hasTimeIpDepart : 1;
+	bool hasTimeTcpArrive : 1;
+	bool hasTimeTcpDepart : 1;
+	bool hasTimeUdpArrive : 1;
+	bool hasTimeUdpDepart : 1;
 	bool hasSocketFrom  : 1;
 	bool hasSocketTo    : 1;
 

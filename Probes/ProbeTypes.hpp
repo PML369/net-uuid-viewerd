@@ -19,6 +19,8 @@ PROBETYPE(Probe_drop);
 PROBETYPE(Probe_socket_create);
 PROBETYPE(Probe_from_socket);
 PROBETYPE(Probe_to_socket);
+PROBETYPE(Probe_layer_arrive);
+PROBETYPE(Probe_layer_depart);
 PROBETYPE(Probe_to_subsys);
 PROBETYPE(Probe_fragment);
 
