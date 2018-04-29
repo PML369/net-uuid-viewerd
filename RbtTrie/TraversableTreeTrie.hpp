@@ -42,14 +42,25 @@ public:
 
 	template <typename value_type, typename OutputIterator>
 	void getDataWithKeyPrefix(const KE prefix[], unsigned int length,
-			OutputIterator out, value_type(*callback)(tKey, V *))
+			OutputIterator out, value_type(*convert)(tKey, V *))
+	{
+		getDataWithKeyPrefix(prefix, length, out, convert,
+				[](tKey l, V *v) { return true; });
+	}
+
+	template <typename value_type, typename OutputIterator>
+	void getDataWithKeyPrefix(const KE prefix[], unsigned int length,
+			OutputIterator out, value_type(*convert)(tKey, V *),
+			bool(*predicate)(tKey, V *))
 	{
 		unsigned int matchLength = length;
 		pNode match = this->findClosestMatch(prefix, &matchLength);
 		if (matchLength != 0)
 			return;
 
-		auto params = std::make_pair(callback, out);
+		auto params = std::make_pair(
+					std::make_pair(predicate, convert),
+					out);
 
 		inOrderTraverse(match, prefix, length,
 			&TraversableTreeTrie<KE, V>::
@@ -168,8 +179,11 @@ protected:
 	static void getDataWithKeyPrefixTraverseAction(OutputPair *out,
 			tKey key, V *value)
 	{
-		*(out->second) = (out->first)(key, value);
-		(out->second)++;
+		if (out->first.first(key, value))
+		{
+			*(out->second) = (out->first.second)(key, value);
+			(out->second)++;
+		}
 	}
 };
 
