@@ -18,8 +18,28 @@ $(document).ready(function() {
 });
 
 function genLayerBox() {
-	apiAjax({ command: "layer_timings", layers: "[\"IP\"]" },
+	var layers = [];
+	$('#layers label').each(function() {
+		var lb = $(this);
+		if (document.getElementById(lb.attr('for')).checked)
+			layers.push(lb.text());
+	});
+
+	apiAjax({ command: "layer_timings", layers: JSON.stringify(layers) },
 		function(data, textStatus, jqXHR) {
-			alert(data);
+			var boxData = [];
+			data.forEach(function(l) {
+				boxData.push({
+					x: l.data,
+					type: 'box',
+					name: l.layer + ' Layer'
+				});
+			});
+			Plotly.react('layer-boxplot', boxData, {
+					height: 150*boxData.length,
+					xaxis: {
+						title: 'Transit time / \u00B5s'
+					}
+				});
 		});
 }
