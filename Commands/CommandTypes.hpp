@@ -13,5 +13,7 @@ public: \
 
 COMMANDTYPE(Command_dump_data);
 COMMANDTYPE(Command_address_heatmap);
+COMMANDTYPE(Command_defined_layers);
+COMMANDTYPE(Command_layer_timings);
 
 #endif /*COMMANDTYPES_HPP*/

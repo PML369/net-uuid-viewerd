@@ -4,8 +4,12 @@ if (!isset($_GET['command'])) {
 	exit;
 }
 
-$cmds = array(	"dump_data" => array(),
-		"address_heatmap" => array("prefix" => false));
+$cmds = array(
+	"dump_data" => array(),
+	"address_heatmap" => array("prefix" => false),
+	"defined_layers" => array(),
+	"layer_timings" => array("layers" => true)
+);
 
 $cmd = $_GET['command'];
 if (!isset($cmds[$cmd])) {
