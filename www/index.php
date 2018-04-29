@@ -9,7 +9,25 @@
 	</head>
 	<body>
 	<div class="container">
-		<textarea id="dump"></textarea>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col">Show information for layers:</div>
+			<div class="col"></div>
+		</div>
+		<div id="layers" class="row"></div>
+		<div class="row">
+			<div class="col"></div>
+			<div class="col">
+				<button type="button" class="btn btn-primary"
+							onclick="genLayerBox()">
+					Generate delay box plot
+				</button>
+			</div>
+			<div class="col"></div>
+		</div>
+		<div class="row">
+			<div id="layer-boxplot" class="col"></div>
+		</div>
 		<div class="row vertical-align">
 			<div class="col"></div>
 			<div class="col align-middle">
@@ -32,18 +50,26 @@
 		<div class="row">
 			<div id="heatmap" class="col"></div>
 		</div>
+		<textarea id="dump"></textarea>
+	</div>
+	<div id="templates" style="display: none">
+		<div id=layer class="col">
+			<input type="checkbox" checked="checked"/>
+			<label></label>
+		</div>
+	</div>
 	</body>
 	<script type="text/javascript" src="api.js"></script>
 	<script type="text/javascript" src="heatmap.js"></script>
+	<script type="text/javascript" src="layerBox.js"></script>
 	<script type="text/javascript">
 $(document).ready(function() {
-
-
 	$('#dump').val("");
 	apiAjax({ command: "dump_data" },
 		function(data, textStatus, jqXHR) {
 			$('#dump').val(data);
 		}, "text");
+
 });
 	</script>
 </html>
