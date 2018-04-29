@@ -39,7 +39,9 @@
 				</label>
 			</div>
 			<div class="col align-middle">
-				<input type="text" id="heatmap-prefix"/>
+				<input type="text" id="heatmap-prefix"
+							class="form-control"
+							autocomplete="off"/>
 			</div>
 			<div class="col align-middle">
 				<button type="button" class="btn btn-primary"
@@ -65,6 +67,7 @@
 	<script type="text/javascript" src="api.js"></script>
 	<script type="text/javascript" src="heatmap.js"></script>
 	<script type="text/javascript" src="layerBox.js"></script>
+	<script type="text/javascript" src="autocomplete.js"></script>
 	<script type="text/javascript">
 $(document).ready(function() {
 	$('#dump').val("");

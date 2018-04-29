@@ -8,7 +8,8 @@ $cmds = array(
 	"dump_data" => array(),
 	"address_heatmap" => array("prefix" => false),
 	"defined_layers" => array(),
-	"layer_timings" => array("layers" => true)
+	"layer_timings" => array("layers" => true),
+	"address_prefix" => array("prefix" => false)
 );
 
 $cmd = $_GET['command'];
@@ -23,7 +24,7 @@ foreach ($cmds[$cmd] as $param => $hasSpaces) {
 		http_response_code(400);
 		exit;
 	}
-	$request .= $_GET[$param] . ($hasSpaces ? '\0' : ' ');
+	$request .= $_GET[$param] . ($hasSpaces ? "\0" : " ");
 }
 
 $request = strlen($request) . " $request";

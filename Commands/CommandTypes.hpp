@@ -15,5 +15,6 @@ COMMANDTYPE(Command_dump_data);
 COMMANDTYPE(Command_address_heatmap);
 COMMANDTYPE(Command_defined_layers);
 COMMANDTYPE(Command_layer_timings);
+COMMANDTYPE(Command_address_prefix);
 
 #endif /*COMMANDTYPES_HPP*/
