@@ -8,7 +8,9 @@ Probe_drop::getDScript(void)
 	return LONG_STRING_LITERAL(
 		net_uuid:packet::drop
 		{
-			printf("drop %s %d", stringof(arg0), timestamp);
+			printf("drop %s %d",
+					uuidtostr((uintptr_t)arg0),
+					timestamp);
 		});
 }
 

@@ -8,9 +8,10 @@ Probe_layer_depart::getDScript(void)
 	return LONG_STRING_LITERAL(
 		net_uuid:packet::layer-depart
 		{
-			printf("layer-depart %s %s %d", stringof(arg0),
-							stringof(arg1),
-							timestamp);
+			printf("layer-depart %s %s %d",
+					uuidtostr((uintptr_t)arg0),
+					stringof(arg1),
+					timestamp);
 		});
 }
 

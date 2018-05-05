@@ -8,8 +8,9 @@ Probe_to_subsys::getDScript(void)
 	return LONG_STRING_LITERAL(
 		net_uuid:packet::to-subsys
 		{
-			printf("to-subsys %s %s", stringof(arg0),
-							stringof(arg1));
+			printf("to-subsys %s %s",
+					uuidtostr((uintptr_t)arg0),
+					stringof(arg1));
 		});
 }
 

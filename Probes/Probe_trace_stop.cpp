@@ -8,7 +8,9 @@ Probe_trace_stop::getDScript(void)
 	return LONG_STRING_LITERAL(
 		net_uuid:packet::trace-stop
 		{
-			printf("trace-stop %s %d", stringof(arg0), timestamp);
+			printf("trace-stop %s %d",
+					uuidtostr((uintptr_t)arg0),
+					timestamp);
 		});
 }
 

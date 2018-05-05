@@ -10,7 +10,7 @@ Probe_trace_start::getDScript(void)
 		net_uuid:packet::trace-start
 		{
 			printf("trace-start %s %d %p",
-					stringof(arg0),
+					uuidtostr((uintptr_t)arg0),
 					timestamp,
 					arg1);
 		});

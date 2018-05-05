@@ -8,9 +8,10 @@ Probe_layer_arrive::getDScript(void)
 	return LONG_STRING_LITERAL(
 		net_uuid:packet::layer-arrive
 		{
-			printf("layer-arrive %s %s %d", stringof(arg0),
-							stringof(arg1),
-							timestamp);
+			printf("layer-arrive %s %s %d",
+					uuidtostr((uintptr_t)arg0),
+					stringof(arg1),
+					timestamp);
 		});
 }
 

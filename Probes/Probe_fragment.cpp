@@ -8,7 +8,9 @@ Probe_fragment::getDScript(void)
 	return LONG_STRING_LITERAL(
 		net_uuid:packet::fragment
 		{
-			printf("fragment %s %s", stringof(arg0),stringof(arg1));
+			printf("fragment %s %s",
+					uuidtostr((uintptr_t)arg0),
+					uuidtostr((uintptr_t)arg1));
 		});
 }
 

@@ -8,8 +8,9 @@ Probe_from_socket::getDScript(void)
 	return LONG_STRING_LITERAL(
 		net_uuid:packet::from-socket
 		{
-			printf("from-socket %s %s", stringof(arg0),
-							stringof(arg1));
+			printf("from-socket %s %s",
+					uuidtostr((uintptr_t)arg0),
+					uuidtostr((uintptr_t)arg1));
 		});
 }
 

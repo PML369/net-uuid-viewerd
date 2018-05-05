@@ -10,7 +10,7 @@ Probe_socket_create::getDScript(void)
 		net_uuid:socket::create
 		{
 			printf("socket-create %s %d %s\0",
-					stringof(args[0]),
+					uuidtostr((uintptr_t)args[0]),
 					args[1].pr_pid,
 					args[1].pr_psargs);
 		});

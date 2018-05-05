@@ -8,7 +8,9 @@ Probe_mem_alloc::getDScript(void)
 	return LONG_STRING_LITERAL(
 		net_uuid:mem::alloc
 		{
-			printf("alloc %s %p", stringof(arg0), arg1);
+			printf("alloc %s %p",
+					uuidtostr((uintptr_t)arg0),
+					arg1);
 		});
 }
 
