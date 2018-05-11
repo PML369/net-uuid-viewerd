@@ -1,7 +1,7 @@
 /*
  * Copyright (C) Peter Lotts 2018
  *
- * A template implementation of a Red-Black Ternary Trie,
+ * A template implementation of a Red-Black Ternary Tree,
  * using templated arrays as the keys
  * (the template type must support < comparison)
  *
@@ -11,17 +11,17 @@
  * balanced by making that tree a red-black tree.
  */
 
-#include <RbtTrie/RbtTrieNode.hpp>
-#include <RbtTrie/TreeTrie.hpp>
+#include <RbTst/RbTstNode.hpp>
+#include <RbTst/Tst.hpp>
 
-#ifndef RBT_TRIE_HPP
-#define RBT_TRIE_HPP
+#ifndef RB_TST_HPP
+#define RB_TST_HPP
 
 template <typename KE, typename V>
-class RbtTrie : public TreeTrie<KE, V> {
-	friend class RbtTrieInternalTest;
+class RbTst : public Tst<KE, V> {
+	friend class RbTstInternalTest;
 protected:
-	typedef typename TreeTrie<KE, V>::pNode pNode;
+	typedef typename Tst<KE, V>::pNode pNode;
 
 public:
 	bool insert(const KE key[], unsigned int length, V *val) {
@@ -188,4 +188,4 @@ protected:
 	}
 };
 
-#endif /* RBT_TRIE_HPP */
+#endif /* RB_TST_HPP */

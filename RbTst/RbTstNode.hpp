@@ -1,20 +1,20 @@
 /*
  * Copyright (C) Peter Lotts 2018
  *
- * A template implementation of a Red-Black Ternary Trie,
+ * A template implementation of a Red-Black Ternary Tree,
  * using templated arrays as the keys
  * (the template type must support < comparison)
  *
- * This class represents each node of the Ternary Trie,
+ * This class represents each node of the Ternary Tree,
  * holding pointers to neighbour nodes and to payload data
  * at the leaves of the tree.
  */
 
-#ifndef RBT_TRIE_NODE_HPP
-#define RBT_TRIE_NODE_HPP
+#ifndef RB_TST_NODE_HPP
+#define RB_TST_NODE_HPP
 
 template <typename KE, typename V>
-class RbtTrieNode
+class RbTstNode
 {
 private:
 	struct
@@ -26,8 +26,8 @@ private:
 	} flags;
 
 	KE keyEntry;
-	RbtTrieNode *middle;
-	RbtTrieNode *parent;
+	RbTstNode *middle;
+	RbTstNode *parent;
 
 	// To save space, the left and right pointers get re-purposed when
 	// we are a leaf node. The left pointer points to the payload of a
@@ -35,23 +35,23 @@ private:
 	// key suffix, if we have one.
 
 	union {
-	       RbtTrieNode *node;
+	       RbTstNode *node;
 	       V *payload;
 	} left;
 
 	union {
-		RbtTrieNode *node;
+		RbTstNode *node;
 		KE *suffix;
 	} right;
 
 public:
 	/* Leaf non-suffix constructor */
-	RbtTrieNode(KE keyEntry, V *payload)
+	RbTstNode(KE keyEntry, V *payload)
 	{
 		constructWithSingletonSuffix(keyEntry, payload);
 	}
 	/* Leaf suffix constructor */
-	RbtTrieNode(KE *keySuffix, unsigned int suffixLen, V *payload)
+	RbTstNode(KE *keySuffix, unsigned int suffixLen, V *payload)
 	{
 		if (suffixLen == 1)
 		{
@@ -71,7 +71,7 @@ public:
 			throw std::out_of_range("Key suffix too long");
 	}
 	/* Internal node constructor */
-	RbtTrieNode(KE keyEntry, RbtTrieNode *child)
+	RbTstNode(KE keyEntry, RbTstNode *child)
 	{
 		this->keyEntry = keyEntry;
 		left.node = NULL;
@@ -89,11 +89,11 @@ public:
 	bool isRed()  { return flags.isRed;  }
 	void setRed(bool red) { flags.isRed = red; }
 
-	RbtTrieNode *getLeft()
+	RbTstNode *getLeft()
 	{
 		return flags.isLeaf ? NULL : left.node;
 	}
-	void setLeft(RbtTrieNode *node)
+	void setLeft(RbTstNode *node)
 	{
 		if (flags.isLeaf)
 			return;
@@ -108,11 +108,11 @@ public:
 		left.node = NULL;
 	}
 
-	RbtTrieNode *getRight()
+	RbTstNode *getRight()
 	{
 		return flags.isLeaf ? NULL : right.node;
 	}
-	void setRight(RbtTrieNode *node)
+	void setRight(RbTstNode *node)
 	{
 		if (flags.isLeaf)
 			return;
@@ -131,20 +131,20 @@ public:
 	{
 		return flags.isLeaf ? left.payload : NULL;
 	}
-	RbtTrieNode *getParent()
+	RbTstNode *getParent()
 	{
 		return parent;
 	}
-	void setParent(RbtTrieNode *newParent)
+	void setParent(RbTstNode *newParent)
 	{
 		parent = newParent;
 	}
 	void clearParent(void) { parent = NULL; }
-	RbtTrieNode *getChild()
+	RbTstNode *getChild()
 	{
 		return flags.isLeaf ? NULL : middle;
 	}
-	bool setChild(RbtTrieNode *newChild)
+	bool setChild(RbTstNode *newChild)
 	{
 		if (flags.isLeaf)
 			return false;
@@ -182,7 +182,7 @@ public:
 		return copy;
 	}
 
-	~RbtTrieNode()
+	~RbTstNode()
 	{
 		if (isLeaf() && right.suffix != NULL)
 			delete[] right.suffix;
@@ -201,4 +201,4 @@ private:
 		flags.suffixLen = 1;
 	}
 };
-#endif /* RBT_TRIE_NODE_HPP */
+#endif /* RB_TST_NODE_HPP */

@@ -1,7 +1,7 @@
 CXXTESTGEN = cxxtest/bin/cxxtestgen
 CXXTESTINCLUDE = cxxtest/
 
-TESTS = RbtTrie RbtTrieInternal RbtTrieNode
+TESTS = RbTst RbTstInternal RbTstNode
 CPPS = $(TESTS:%=%Test.cpp)
 
 DEPDIR = .d
@@ -12,7 +12,7 @@ DEPFLAGS = -MD
 COMPILE.cpp = c++ -g $(DEPFLAGS) $(INCLUDE) -std=c++11 -c
 POSTCOMPILE = @mv -f $*.d $(DEPDIR)/$*.d && touch $@
 
-build: runRbtTrieTest.out
+build: runRbTstTest.out
 
 runner.cpp:
 	$(CXXTESTGEN) --error-printer --root -o $(.TARGET)
@@ -29,14 +29,14 @@ runner.o : runner.cpp
 	$(COMPILE.cpp) -o $(.TARGET) $<
 	$(POSTCOMPILE)
 
-runRbtTrieTest.out: $(CPPS:%.cpp=%.o) runner.o
+runRbTstTest.out: $(CPPS:%.cpp=%.o) runner.o
 	c++ -o $(.TARGET) $(.ALLSRC)
 
 run: build
-	./runRbtTrieTest.out
+	./runRbTstTest.out
 
 clean:
-	rm -f ./runRbtTrieTest.out
+	rm -f ./runRbTstTest.out
 	rm -f $(CPPS)
 	rm -f $(TESTS:%=%Test.o)
 	rm -f runner.cpp

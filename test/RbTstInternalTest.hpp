@@ -1,17 +1,17 @@
 /*
- * Test suite for RbtTrie class
+ * Test suite for RbTst class
  *
  * Copyright (c) Peter Lotts 2018
  *
  */
 
 #include <cxxtest/TestSuite.h>
-#include <RbtTrie/RbtTrie.hpp>
+#include <RbTst/RbTst.hpp>
 
 #include <list>
 #include <iterator>
 
-class RbtTrieInternalTest : public CxxTest::TestSuite
+class RbTstInternalTest : public CxxTest::TestSuite
 {
 private:
 	int a;
@@ -19,8 +19,8 @@ private:
 public:
 	void testIsBlackPredicate(void)
 	{
-		RbtTrie<char, int> t;
-		RbtTrieNode<char, int> node('a', &a);
+		RbTst<char, int> t;
+		RbTstNode<char, int> node('a', &a);
 
 		node.setRed(true);
 		TS_ASSERT(t.isBlack(&node) == false);
@@ -31,8 +31,8 @@ public:
 
 	void testRotation(void)
 	{
-		RbtTrieNode<char, int> *p = NULL;
-		RbtTrieNode<char, int> 	alpha('x', p),
+		RbTstNode<char, int> *p = NULL;
+		RbTstNode<char, int> 	alpha('x', p),
 					beta ('x', p),
 					gamma('x', p),
 					x    ('x', p),
@@ -51,7 +51,7 @@ public:
 		TS_ASSERT(head.getLeft()->getRight()->getLeft() == &beta);
 		TS_ASSERT(head.getLeft()->getRight()->getRight() == &gamma);
 
-		RbtTrie<char, int> t;
+		RbTst<char, int> t;
 		t.rotateLeft (head.getLeft());
 
 		TS_ASSERT(head.getLeft() == &y);
@@ -71,17 +71,17 @@ public:
 
 	void testCollectionDump(void)
 	{
-		RbtTrie<char, int> trie;
+		RbTst<char, int> trie;
 		char k1[] = "ananas";
 		char k2[] = "anas";
 		char k3[] = "as";
 		TS_ASSERT(trie.insert(k1, 6, &a));
 		TS_ASSERT(trie.insert(k2, 4, &a));
 		TS_ASSERT(trie.insert(k3, 2, &a));
-		std::list<RbtTrie<char, int>::tKey> list;
+		std::list<RbTst<char, int>::tKey> list;
 		trie.getKeysWithPrefix(NULL, 0, std::back_inserter(list));
 
-		std::list<RbtTrie<char, int>::tKey>::iterator it = list.begin();
+		std::list<RbTst<char, int>::tKey>::iterator it = list.begin();
 		TS_ASSERT(it->second == 6);
 		TS_ASSERT(memcmp(it->first, k1, 6) == 0);
 		delete[] it->first;
@@ -99,7 +99,7 @@ public:
 
 	void testGetKeysWithPrefix(void)
 	{
-		RbtTrie<char, int> trie;
+		RbTst<char, int> trie;
 		char k1[] = "ananas";
 		char k2[] = "anas";
 		char k3[] = "as";
@@ -107,10 +107,10 @@ public:
 		TS_ASSERT(trie.insert(k1, 6, &a));
 		TS_ASSERT(trie.insert(k2, 4, &a));
 		TS_ASSERT(trie.insert(k3, 2, &a));
-		std::list<RbtTrie<char, int>::tKey> list;
+		std::list<RbTst<char, int>::tKey> list;
 		trie.getKeysWithPrefix(prefix, 2, std::back_inserter(list));
 
-		std::list<RbtTrie<char, int>::tKey>::iterator it = list.begin();
+		std::list<RbTst<char, int>::tKey>::iterator it = list.begin();
 		TS_ASSERT(it->second == 6);
 		TS_ASSERT(memcmp(it->first, k1, 6) == 0);
 		delete[] it->first;
@@ -122,9 +122,9 @@ public:
 	}
 
 #define testRbtFixupSetup(R, L1, L2) \
-		RbtTrie<char, int> trie; \
-		RbtTrieNode<char, int> *ptr = NULL; \
-		RbtTrieNode<char, int> 	head		('x', ptr), \
+		RbTst<char, int> trie; \
+		RbTstNode<char, int> *ptr = NULL; \
+		RbTstNode<char, int> 	head		('x', ptr), \
 					grandparent	('x', ptr), \
 					parent		('x', ptr), \
 					child		('x', ptr), \
@@ -146,7 +146,7 @@ public:
 		\
 		trie.fixupRedBlackInvariants(&child);
 
-	// Different cases for fixupRbtTrie to handle - there are 8,
+	// Different cases for fixupRbTst to handle - there are 8,
 	// coded as follows:
 	// testRbtFixup [uncle colour]
 	// 		[grandparent-parent direction]
@@ -277,11 +277,11 @@ public:
 
 	void testLongInsertion(void)
 	{
-		RbtTrie<char, int> trie;
+		RbTst<char, int> trie;
 		int x = 4;
 		char k[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890./+=";
 		TS_ASSERT(trie.insert(k, 66, &a));
-		RbtTrieNode<char, int> *node = trie.head;
+		RbTstNode<char, int> *node = trie.head;
 		TS_ASSERT(node != NULL);
 		for (unsigned int i = 0; node != NULL;
 					 node = node->getChild(), i++)
@@ -304,13 +304,13 @@ public:
 
 	void testSharedPrefixLeafInsertion(void)
 	{
-		RbtTrie<char, int> trie;
+		RbTst<char, int> trie;
 		char k1[] = "The quick brown fox";
 		char k2[] = "The quick brown dog";
 		TS_ASSERT(trie.insert(k1, 19, &a));
 		TS_ASSERT(trie.insert(k2, 19, &a));
 
-		RbtTrieNode<char, int> *node = trie.head;
+		RbTstNode<char, int> *node = trie.head;
 		TS_ASSERT(node != NULL);
 		for (unsigned int i = 0; node != NULL;
 					 node = node->getChild(), i++)
@@ -346,7 +346,7 @@ public:
 
 	void testSharedPrefixInsertion(void)
 	{
-		RbtTrie<char, int> trie;
+		RbTst<char, int> trie;
 		char k1[] = "The quick brown fox";
 		char k2[] = "The quick brown dog";
 		char k3[] = "The cat";
@@ -363,7 +363,7 @@ public:
 		TS_ASSERT(trie.insert(k4, 7, &a));
 
 		// Move through to the node with the split
-		RbtTrieNode<char, int> *node = trie.head;
+		RbTstNode<char, int> *node = trie.head;
 		TS_ASSERT(node != NULL);
 		for (unsigned int i = 0; node != NULL && i < 4;
 					 node = node->getChild(), i++)

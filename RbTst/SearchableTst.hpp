@@ -1,7 +1,7 @@
 /*
  * Copyright (C) Peter Lotts 2018
  *
- * A template implementation of a Ternary Trie,
+ * A template implementation of a Ternary Tree,
  * using templated arrays as the keys
  * (the template type must support < comparison)
  *
@@ -10,20 +10,20 @@
  * of a ternary tree.
  */
 
-#include <RbtTrie/RbtTrieNode.hpp>
+#include <RbTst/RbTstNode.hpp>
 
-#ifndef SEARCHABLE_TREE_TRIE_HPP
-#define SEARCHABLE_TREE_TRIE_HPP
+#ifndef SEARCHABLE_TST_HPP
+#define SEARCHABLE_TST_HPP
 
 template <typename KE, typename V>
-class SearchableTreeTrie {
-	friend class RbtTrieInternalTest;
+class SearchableTst {
+	friend class RbTstInternalTest;
 protected:
-	typedef RbtTrieNode<KE, V> *pNode;
+	typedef RbTstNode<KE, V> *pNode;
 	pNode head;
 public:
 	typedef std::pair<KE *, unsigned int> tKey;
-	SearchableTreeTrie() {
+	SearchableTst() {
 		head = NULL;
 	}
 
@@ -81,4 +81,4 @@ protected:
 	}
 };
 
-#endif /* RBT_TRIE_HPP */
+#endif /* SEARCHABLE_TST_HPP */

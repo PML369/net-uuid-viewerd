@@ -10,7 +10,7 @@ Command_address_heatmap::getCommand()
 }
 
 static std::pair<std::string, unsigned int>
-dataCallback(RbtTrie<char, NetUuidData::infolist_t>::tKey key,
+dataCallback(RbTst<char, NetUuidData::infolist_t>::tKey key,
 					NetUuidData::infolist_t *value)
 {
 	return std::pair<std::string, unsigned int>(std::string(key.first, key.second), value->size());

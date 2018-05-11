@@ -24,7 +24,7 @@ protected:
 								NetUuidData *);
 private:
 	NetUuidData::infolist_t *getOrCreatePacketInfoVector(std::string &,
-				RbtTrie<char, NetUuidData::infolist_t> *trie);
+				RbTst<char, NetUuidData::infolist_t> *trie);
 };
 
 #endif /*PROBETYPE_HPP*/

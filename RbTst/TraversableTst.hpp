@@ -1,7 +1,7 @@
 /*
  * Copyright (C) Peter Lotts 2018
  *
- * A template implementation of a Ternary Trie,
+ * A template implementation of a Ternary Tree,
  * using templated arrays as the keys
  * (the template type must support < comparison)
  *
@@ -10,19 +10,19 @@
  * of a ternary tree.
  */
 
-#include <RbtTrie/RbtTrieNode.hpp>
-#include <RbtTrie/SearchableTreeTrie.hpp>
+#include <RbTst/RbTstNode.hpp>
+#include <RbTst/SearchableTst.hpp>
 
-#ifndef TRAVERSABLE_TREE_TRIE_HPP
-#define TRAVERSABLE_TREE_TRIE_HPP
+#ifndef TRAVERSABLE_TST_HPP
+#define TRAVERSABLE_TST_HPP
 
 template <typename KE, typename V>
-class TraversableTreeTrie : public SearchableTreeTrie<KE, V> {
-	friend class RbtTrieInternalTest;
+class TraversableTst : public SearchableTst<KE, V> {
+	friend class RbTstInternalTest;
 protected:
-	typedef typename SearchableTreeTrie<KE, V>::pNode pNode;
+	typedef typename SearchableTst<KE, V>::pNode pNode;
 public:
-	typedef typename SearchableTreeTrie<KE, V>::tKey tKey;
+	typedef typename SearchableTst<KE, V>::tKey tKey;
 
 	template <typename OutputIterator>
 	void getKeysWithPrefix(const KE prefix[], unsigned int length,
@@ -63,7 +63,7 @@ public:
 					out);
 
 		inOrderTraverse(match, prefix, length,
-			&TraversableTreeTrie<KE, V>::
+			&TraversableTst<KE, V>::
 				getDataWithKeyPrefixTraverseAction, &params);
 	}
 
@@ -187,4 +187,4 @@ protected:
 	}
 };
 
-#endif /* RBT_TRIE_HPP */
+#endif /* TRAVERSABLE_TST_HPP */

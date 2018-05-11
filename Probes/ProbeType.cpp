@@ -38,7 +38,7 @@ ProbeType::getOrCreateSocketVector(std::string &socket, NetUuidData *data)
 }
 NetUuidData::infolist_t *
 ProbeType::getOrCreatePacketInfoVector(std::string &key,
-			RbtTrie<char, NetUuidData::infolist_t> *trie)
+			RbTst<char, NetUuidData::infolist_t> *trie)
 {
 	NetUuidData::infolist_t *vec = trie->get(key.c_str(), key.length());
 	if (vec != NULL)

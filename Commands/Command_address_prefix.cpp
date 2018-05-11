@@ -23,7 +23,7 @@ Command_address_prefix::execute(std::stringstream& sstream, std::string& out,
 		data->addrTrie.getDataWithKeyPrefix<std::string>(
 			prefix.c_str(), prefix.length(),
 			std::back_inserter(j),
-			[](RbtTrie<char, PacketInfo>::tKey key,
+			[](RbTst<char, PacketInfo>::tKey key,
 					std::vector<PacketInfo *> *vec) {
 				return std::string(key.first, key.second);
 			});

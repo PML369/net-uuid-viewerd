@@ -1,7 +1,7 @@
 /*
  * Copyright (C) Peter Lotts 2018
  *
- * A template implementation of a read only Ternary Trie,
+ * A template implementation of a read only Ternary Tree,
  * using templated arrays as the keys
  * (the template type must support < comparison)
  *
@@ -10,17 +10,17 @@
  * of a ternary tree.
  */
 
-#include <RbtTrie/RbtTrieNode.hpp>
-#include <RbtTrie/TraversableTreeTrie.hpp>
+#include <RbTst/RbTstNode.hpp>
+#include <RbTst/TraversableTst.hpp>
 
-#ifndef TREE_TRIE_HPP
-#define TREE_TRIE_HPP
+#ifndef TST_HPP
+#define TST_HPP
 
 template <typename KE, typename V>
-class TreeTrie : public TraversableTreeTrie<KE, V> {
-	friend class RbtTrieInternalTest;
+class Tst : public TraversableTst<KE, V> {
+	friend class RbTstInternalTest;
 protected:
-	typedef typename TraversableTreeTrie<KE, V>::pNode pNode;
+	typedef typename TraversableTst<KE, V>::pNode pNode;
 public:
 	bool insert(const KE key[], unsigned int length, V *val) {
 		return (insertImpl(key, length, val) != NULL);
@@ -109,12 +109,12 @@ protected:
 
 		KE *newSuffix = new KE[length-i];
 		memcpy(newSuffix, &key[i], length-i);
-		pNode tempNode = new RbtTrieNode<KE, V>
+		pNode tempNode = new RbTstNode<KE, V>
 						(newSuffix, length-i, val);
 		for (;i > 0; i--)
-			tempNode = new RbtTrieNode<KE, V>(key[i-1], tempNode);
+			tempNode = new RbTstNode<KE, V>(key[i-1], tempNode);
 		return tempNode;
 	}
 };
 
-#endif /* RBT_TRIE_HPP */
+#endif /* TST_HPP */

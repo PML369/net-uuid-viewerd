@@ -3,7 +3,7 @@
 #define NET_UUID_DATA_HPP
 
 #include "PacketInfo.hpp"
-#include "RbtTrie/RbtTrie.hpp"
+#include "RbTst/RbTst.hpp"
 #include <sys/types.h>
 #include <map>
 #include <vector>
@@ -14,11 +14,11 @@ class NetUuidData
 public:
 	typedef std::vector<PacketInfo *> infolist_t;
 
-	RbtTrie		<char, PacketInfo>		uuidTrie;
-	RbtTrie		<char, infolist_t>		addrTrie;
+	RbTst		<char, PacketInfo>		uuidTrie;
+	RbTst		<char, infolist_t>		addrTrie;
 	std::multimap	<std::string, pid_t>		procNamePidMap;
 	std::multimap	<pid_t, std::string>		pidSocketMap;
-	RbtTrie		<char, infolist_t>		socketTrie;
+	RbTst		<char, infolist_t>		socketTrie;
 	std::map	<std::string, PacketInfo *>	uuidCacheMap;
 
 	NetUuidData();

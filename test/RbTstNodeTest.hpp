@@ -1,20 +1,20 @@
 /*
- * Test suite for RbtTrie class
+ * Test suite for RbTst class
  *
  * Copyright (c) Peter Lotts 2018
  *
  */
 
 #include <cxxtest/TestSuite.h>
-#include <RbtTrie/RbtTrieNode.hpp>
+#include <RbTst/RbTstNode.hpp>
 
-class RbtTrieNodeTest : public CxxTest::TestSuite
+class RbTstNodeTest : public CxxTest::TestSuite
 {
 public:
 	void x(void)
 	{
 		char k[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890./+=";
-		RbtTrieNode<char, int> tn(k, 65, NULL);
+		RbTstNode<char, int> tn(k, 65, NULL);
 	}
 	void testNodeSuffixLengthLimit(void)
 	{
@@ -24,14 +24,14 @@ public:
 	void testKeySuffixMatchTrue(void)
 	{
 		char k = 'A';
-		RbtTrieNode<char, int> tn(&k, 1, (int *)NULL);
+		RbTstNode<char, int> tn(&k, 1, (int *)NULL);
 		TS_ASSERT(tn.matchesKeySuffix(&k, 1));
 	}
 
 	void testKeySuffixMatchMismatch(void)
 	{
 		char k = 'A';
-		RbtTrieNode<char, int> tn(&k, 1, (int *)NULL);
+		RbTstNode<char, int> tn(&k, 1, (int *)NULL);
 		k = 'Q';
 		TS_ASSERT(!tn.matchesKeySuffix(&k, 1));
 	}
@@ -39,7 +39,7 @@ public:
 	void testKeySuffixMatchDifferentLength(void)
 	{
 		char k = 'A';
-		RbtTrieNode<char, int> tn(&k, 1, (int *)NULL);
+		RbTstNode<char, int> tn(&k, 1, (int *)NULL);
 		char j[] = "ABC";
 		TS_ASSERT(!tn.matchesKeySuffix(j, 3));
 	}

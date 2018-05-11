@@ -24,7 +24,7 @@ Command_layer_timings::execute(std::stringstream& sstream, std::string& out,
 		json layers = json::parse(layerStr);
 		json result = json::array();
 
-		using tKey = RbtTrie<char, PacketInfo>::tKey;
+		using tKey = RbTst<char, PacketInfo>::tKey;
 
 		for (auto& layer : layers)
 		{
