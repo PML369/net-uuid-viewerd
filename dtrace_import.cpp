@@ -41,6 +41,12 @@ static int buf_read(const dtrace_bufdata_t *buf, void *arg)
 	return 0;
 }
 
+static int handle_dtrace_error(const dtrace_errdata_t *data, void *value)
+{
+	fprintf(stderr, "DTrace error: %s\n", data->dteda_msg);
+	return DTRACE_HANDLE_OK;
+}
+
 int applicationInterrupted;
 
 bool setupDTrace(unsigned int rate, NetUuidData *data)
@@ -55,10 +61,12 @@ bool setupDTrace(unsigned int rate, NetUuidData *data)
 	}
 	printf("Dtrace initialized\n");
 
-	(void) dtrace_setopt(g_dtp, "bufsize", "4m");
-	(void) dtrace_setopt(g_dtp, "aggsize", "4m");
-	//(void) dtrace_setopt(g_dtp, "switchrate", std::to_string(rate) + "ms");
+	(void) dtrace_setopt(g_dtp, "bufsize", "256m");
+	(void) dtrace_setopt(g_dtp, "aggsize", "256m");
+	(void) dtrace_setopt(g_dtp, "switchrate",
+					(std::to_string(rate) + "ms").c_str());
 	dtrace_handle_buffered(g_dtp, &buf_read, (void *)data);
+	dtrace_handle_err(g_dtp, &handle_dtrace_error, NULL);
 	printf("dtrace options set\n");
 	return true;
 }
@@ -107,8 +115,10 @@ bool processDTraceBuffers(void)
 			return true;
 		case DTRACE_WORKSTATUS_OKAY:
 			return true;
-		default:
-			fprintf(stderr, "Processing aborted");
+		case DTRACE_WORKSTATUS_ERROR:
+			fprintf(stderr, "Processing aborted with error: %s\n",
+					dtrace_errmsg(g_dtp,
+						dtrace_errno(g_dtp)));
 			return false;
 	}
 }
