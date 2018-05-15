@@ -2,6 +2,7 @@
 #include "NetUuidData.hpp"
 
 #include <vector>
+#include "json.hpp"
 
 std::string
 Command_dump_data::getCommand()
@@ -107,16 +108,31 @@ Command_dump_data::execute(std::stringstream& sstream, std::string& out,
 		out += "]]\n";
 	}
 
-	for (std::multimap<std::string, pid_t>::iterator it =
-			data->procNamePidMap.begin();
-			it != data->procNamePidMap.end(); ++it)
+	try
 	{
-		out += "[proc=\"";
-		out += it->first;
-		out += "\", pid=";
-		out += std::to_string(it->second);
-		out += "]\n";
+		nlohmann::json j = nlohmann::json::array();
+		data->procNamePidTrie.getDataWithKeyPrefix<nlohmann::json>(
+			NULL, 0,
+			std::back_inserter(j),
+			[](RbTst<char, PacketInfo>::tKey key,
+					std::vector<pid_t> *vec) {
+				nlohmann::json e = nlohmann::json::array();
+				for (auto it = vec->begin(); it != vec->end();
+									++it)
+					e.push_back(nlohmann::json::object({
+						{ "proc", std::string(key.first,
+								key.second) },
+						{ "pid", *it }
+					}));
+				return e;
+			});
+		out += j.dump(4);
 	}
+	catch (std::exception &e)
+	{
+		out += e.what();
+	}
+	out += "\n";
 	for (std::multimap<pid_t, std::string>::iterator it =
 			data->pidSocketMap.begin();
 			it != data->pidSocketMap.end(); ++it)

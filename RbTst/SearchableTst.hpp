@@ -28,56 +28,63 @@ public:
 	}
 
 	V *get(const KE key[], unsigned int length) {
-		unsigned int matchLength = length;
-		pNode match = findClosestMatch(key, &matchLength);
-		if (matchLength != 0)
-			return NULL;
-		return match->getPayload();
+		unsigned int matchLength;
+		pNode match;
+		if (findClosestMatch(key, length, &match, &matchLength)
+				&& matchLength == 0 && match->isLeaf())
+			return match->getPayload();
+		return NULL;
 	}
 
 protected:
-	pNode findClosestMatch(const KE key[], unsigned int *plength)
+	bool findClosestMatch(const KE key[], unsigned int length,
+				pNode *match, unsigned int *nodeMatchLength)
 	{
 		if (head == NULL)
-			return NULL;
-		pNode node = head;
+			return false;
+		*match = head;
 		unsigned int index = 0;
-		while (*plength > index)
+		while (length > index)
 		{
-			if (node->isLeaf())
+			if ((*match)->isLeaf())
 			{
-				if (node->matchesKeySuffix(&key[index],
-							   *plength-index))
-					*plength = 0;
-				else
-					*plength -= index;
-				return node;
+				if ((*match)->matchesPrefixOfKeySuffix(
+						&key[index], length-index))
+				{
+					*nodeMatchLength = (*match)
+						->getSuffixLength() - 
+						(length - index);
+					return true;
+				}
+				*nodeMatchLength = index;
+				return false;
 			}
 			else
 			{
-				KE testKeyEntry = node->getKeyEntry();
+				KE testKeyEntry = (*match)->getKeyEntry();
 				pNode newNode;
 				if (key[index] < testKeyEntry)
-					newNode = node->getLeft();
+					newNode = (*match)->getLeft();
 				else if (testKeyEntry < key[index])
-					newNode = node->getRight();
+					newNode = (*match)->getRight();
 				else
 				{
-					newNode = node->getChild();
+					newNode = (*match)->getChild();
 					index++;
 				}
 
 				if (newNode == NULL)
 				{
-					*plength -= index;
-					return node;
+					*nodeMatchLength = index;
+					return false;
 				}
-				node = newNode;
+				(*match) = newNode;
 			}
 		}
 		// We've consumed all input (perhaps we are prefix matching)
-		*plength = 0;
-		return node;
+		(*nodeMatchLength) = ((*match)->isLeaf() ?
+					(*match)->getSuffixLength() : 0);
+		return true;
 	}
 };
 

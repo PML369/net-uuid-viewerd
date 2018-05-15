@@ -35,21 +35,21 @@ protected:
 			return this->head;
 		}
 
-		unsigned int len = length;
-		pNode node = this->findClosestMatch(key, &len);
-
+		unsigned int len, matchLen;
+		pNode node;
 		// Key already exists (or is a prefix of one which exists)
-		if (len == 0)
+		if (this->findClosestMatch(key, length, &node, &matchLen))
 			return NULL;
-		const KE *keySuffix = &key[length - len];
+		const KE *keySuffix = &key[matchLen];
+		len = length - matchLen;
 
 		if (node->isLeaf())
 		{
 			unsigned int nodeSuffixLen = 0;
 			KE *nodeSuffix = node->getSuffixCopy(&nodeSuffixLen);
 
-			unsigned int suffixLen = (len < nodeSuffixLen ? len :
-								nodeSuffixLen);
+			unsigned int suffixLen = (len < nodeSuffixLen
+						? len : nodeSuffixLen);
 			unsigned int i = 0;
 			for (; i < suffixLen; i++)
 				if (keySuffix[i] < nodeSuffix[i] ||

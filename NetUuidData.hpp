@@ -13,10 +13,11 @@ class NetUuidData
 {
 public:
 	typedef std::vector<PacketInfo *> infolist_t;
+	typedef std::vector<pid_t> pidlist_t;
 
 	RbTst		<char, PacketInfo>		uuidTrie;
 	RbTst		<char, infolist_t>		addrTrie;
-	std::multimap	<std::string, pid_t>		procNamePidMap;
+	RbTst		<char, pidlist_t>		procNamePidTrie;
 	std::multimap	<pid_t, std::string>		pidSocketMap;
 	RbTst		<char, infolist_t>		socketTrie;
 	std::map	<std::string, PacketInfo *>	uuidCacheMap;

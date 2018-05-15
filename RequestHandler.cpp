@@ -27,7 +27,8 @@ std::vector<CommandType *> commands = { new Command_dump_data(),
 					new Command_address_heatmap(),
 					new Command_defined_layers(),
 					new Command_layer_timings(),
-					new Command_address_prefix()
+					new Command_address_prefix(),
+					new Command_procname_prefix()
 				};
 
 RequestHandler::RequestHandler(unsigned int listenTimeout, NetUuidData *data)

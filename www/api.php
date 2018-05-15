@@ -6,10 +6,11 @@ if (!isset($_GET['command'])) {
 
 $cmds = array(
 	"dump_data" => array(),
-	"address_heatmap" => array("prefix" => false),
+	"address_heatmap" => array("prefix" => false, "proc_prefix" => true),
 	"defined_layers" => array(),
 	"layer_timings" => array("layers" => true),
-	"address_prefix" => array("prefix" => false)
+	"address_prefix" => array("prefix" => false),
+	"procname_prefix" => array("prefix" => true)
 );
 
 $cmd = $_GET['command'];

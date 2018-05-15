@@ -5,7 +5,8 @@ function genHeatmap() {
 	$('#heatmap-load').addClass('fa-refresh fa-spin');
 	apiAjax({
 			command: "address_heatmap",
-			prefix: $('#heatmap-prefix').val()
+			prefix: $('#heatmap-prefix').val(),
+			proc_prefix: $('#heatmap-procname-prefix').val()
 		}, drawHeatmap);
 }
 

@@ -29,22 +29,27 @@ ProbeType::getOrCreateEntry(std::string &uuid, NetUuidData *data)
 NetUuidData::infolist_t *
 ProbeType::getOrCreateAddressVector(std::string &address, NetUuidData *data)
 {
-	return getOrCreatePacketInfoVector(address, &data->addrTrie);
+	return getOrCreateVector(address, &data->addrTrie);
 }
 NetUuidData::infolist_t *
 ProbeType::getOrCreateSocketVector(std::string &socket, NetUuidData *data)
 {
-	return getOrCreatePacketInfoVector(socket, &data->socketTrie);
+	return getOrCreateVector(socket, &data->socketTrie);
 }
-NetUuidData::infolist_t *
-ProbeType::getOrCreatePacketInfoVector(std::string &key,
-			RbTst<char, NetUuidData::infolist_t> *trie)
+NetUuidData::pidlist_t *
+ProbeType::getOrCreateProcPidVector(std::string &procName, NetUuidData *data)
 {
-	NetUuidData::infolist_t *vec = trie->get(key.c_str(), key.length());
+	return getOrCreateVector(procName, &data->procNamePidTrie);
+}
+template <typename T>
+T *
+ProbeType::getOrCreateVector(std::string &key, RbTst<char, T> *trie)
+{
+	T *vec = trie->get(key.c_str(), key.length());
 	if (vec != NULL)
 		return vec;
 
-	vec = new NetUuidData::infolist_t();
+	vec = new T();
 	trie->insert(key.c_str(), key.length(), vec);
 	return vec;
 }

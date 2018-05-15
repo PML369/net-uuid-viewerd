@@ -2,6 +2,7 @@
 #include "NetUuidData.hpp"
 
 #include <vector>
+#include <set>
 
 std::string
 Command_address_heatmap::getCommand()
@@ -9,33 +10,75 @@ Command_address_heatmap::getCommand()
 	return "address_heatmap";
 }
 
+static std::set<std::string> socketSet;
+
 static std::pair<std::string, unsigned int>
-dataCallback(RbTst<char, NetUuidData::infolist_t>::tKey key,
+dataCallbackProc(RbTst<char, NetUuidData::infolist_t>::tKey key,
 					NetUuidData::infolist_t *value)
 {
-	return std::pair<std::string, unsigned int>(std::string(key.first, key.second), value->size());
+	unsigned int num = 0;
+	for (NetUuidData::infolist_t::iterator it = value->begin();
+						it != value->end(); ++it)
+	{
+		if (((*it)->hasSocketFrom || (*it)->hasSocketTo) && socketSet
+				.find(std::string((*it)->socketUuid, 36))
+							!= socketSet.end())
+			num++;
+	}
+
+	return std::pair<std::string, unsigned int>(
+				std::string(key.first, key.second), num);
+}
+static std::pair<std::string, unsigned int>
+dataCallbackNoProc(RbTst<char, NetUuidData::infolist_t>::tKey key,
+					NetUuidData::infolist_t *value)
+{
+	return std::pair<std::string, unsigned int>(
+			std::string(key.first, key.second), value->size());
 }
 
 void
 Command_address_heatmap::execute(std::stringstream& sstream, std::string& out,
 				NetUuidData *data)
 {
-	std::string prefix;
+	std::string prefix, procPrefix;
 	std::getline(sstream, prefix, ' ');
+	std::getline(sstream, procPrefix, '\0');
 
 	if (prefix.substr(0, 2) == "0x")
 		prefix = prefix.substr(2);
 
+	if (procPrefix.length() != 0)
+	{
+	socketSet.clear();
+	std::vector<NetUuidData::pidlist_t *> pidLists;
+	data->procNamePidTrie.getValuesWithKeyPrefix(
+			procPrefix.c_str(), procPrefix.length(),
+			std::back_inserter(pidLists));
+
+	for (std::vector<NetUuidData::pidlist_t *>::iterator it =
+			pidLists.begin(); it != pidLists.end(); ++it)
+		for (NetUuidData::pidlist_t::iterator it2 = (*it)->begin();
+				it2 != (*it)->end(); ++it2)
+		{
+			auto its = data->pidSocketMap.equal_range(*it2);
+			for (auto it3 = its.first; it3 != its.second; ++it3)
+				socketSet.insert(it3->second);
+		}
+	}
+
 	std::map<std::string, unsigned int> addrData;
 	data->addrTrie.getDataWithKeyPrefix(prefix.c_str(), prefix.length(),
 				std::inserter(addrData, addrData.begin()),
-				&dataCallback);
+				procPrefix.length() == 0 ?
+						&dataCallbackNoProc :
+						&dataCallbackProc);
 	if (addrData.size() == 0)
 		return;
 
 	out += "{";
 
-	unsigned int maxRows = 16, rowsFound = 0;
+	unsigned int maxRows = 8, rowsFound = 0;
 	size_t addrPrefixLen = 1;
 	size_t firstLen;
 	bool notEnoughRows = false;

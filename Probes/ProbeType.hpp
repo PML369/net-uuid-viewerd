@@ -22,9 +22,11 @@ protected:
 								NetUuidData *);
 	NetUuidData::infolist_t *getOrCreateSocketVector(std::string &,
 								NetUuidData *);
+	NetUuidData::pidlist_t  *getOrCreateProcPidVector(std::string &,
+								NetUuidData *);
 private:
-	NetUuidData::infolist_t *getOrCreatePacketInfoVector(std::string &,
-				RbTst<char, NetUuidData::infolist_t> *trie);
+	template <typename T>
+	T *getOrCreateVector(std::string &, RbTst<char, T> *trie);
 };
 
 #endif /*PROBETYPE_HPP*/

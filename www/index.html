@@ -32,7 +32,17 @@
 			<div id="layer-boxplot" class="col"></div>
 		</div>
 		<div class="row vertical-align">
-			<div class="col"></div>
+			<div class="col align-middle">
+				<label for="heatmap-procname-prefix">
+					Process name prefix:
+				</label>
+			</div>
+			<div class="col align-middle">
+				<input type="text" id="heatmap-procname-prefix"
+							class="form-control"
+       							style="width: 350px"
+							autocomplete="off"/>
+			</div>
 			<div class="col align-middle">
 				<label for="heatmap-prefix">
 					Heatmap address prefix:
@@ -50,7 +60,6 @@
 				</button>
 				<i id="heatmap-load" class="fa"></i>
 			</div>
-			<div class="col"></div>
 		</div>
 		<div class="row">
 			<div id="heatmap" class="col"></div>

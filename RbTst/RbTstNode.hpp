@@ -156,11 +156,23 @@ public:
 	KE getKeyEntry() { return keyEntry; }
 	bool matchesKeySuffix(const KE key[], unsigned int length)
 	{
-		if (!flags.isLeaf || length != flags.suffixLen)
+		if (length != flags.suffixLen)
 			return false;
 
-		if (length == 1)
-			return !(keyEntry < key[0] || key[0] < keyEntry);
+		return matchesPrefixOfKeySuffix(key, length);
+	}
+	bool matchesPrefixOfKeySuffix(const KE key[], unsigned int length)
+	{
+		if (!flags.isLeaf || length > flags.suffixLen)
+			return false;
+
+		if (flags.suffixLen == 1)
+		{
+			if (length == 1)
+				return !(keyEntry < key[0] ||key[0] < keyEntry);
+			else
+				return false;
+		}
 
 		KE *suffix = right.suffix;
 		for (int i=0; i<length; i++)
@@ -180,6 +192,10 @@ public:
 		else
 			memcpy(copy, right.suffix, *len);
 		return copy;
+	}
+	unsigned int getSuffixLength()
+	{
+		return flags.suffixLen;
 	}
 
 	~RbTstNode()

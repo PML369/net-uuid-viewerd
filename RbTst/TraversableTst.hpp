@@ -54,13 +54,30 @@ public:
 			bool(*predicate)(tKey, V *))
 	{
 		unsigned int matchLength = length;
-		pNode match = this->findClosestMatch(prefix, &matchLength);
-		if (matchLength != 0)
+		pNode match;
+		if (!this->findClosestMatch(prefix,length, &match,&matchLength))
 			return;
 
 		auto params = std::make_pair(
 					std::make_pair(predicate, convert),
 					out);
+
+		if (match->isLeaf())
+		{
+			unsigned int suffixLength = 0;
+			KE *suffix = match->getSuffixCopy(&suffixLength);
+			unsigned int keyLen = length + matchLength;
+			KE *key = new KE[keyLen];
+			memcpy(key, prefix, length);
+			memcpy(&key[length], &suffix[suffixLength -matchLength],
+						matchLength);
+
+			getDataWithKeyPrefixTraverseAction(&params,
+					tKey(key, keyLen),
+					match->getPayload());
+			delete[] suffix;
+			return;
+		}
 
 		inOrderTraverse(match, prefix, length,
 			&TraversableTst<KE, V>::

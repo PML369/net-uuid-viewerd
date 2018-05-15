@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 std::string
 Probe_socket_create::getDScript(void)
@@ -33,10 +34,8 @@ Probe_socket_create::processBuffer(std::stringstream &buffer, NetUuidData *data)
 
 	data->pidSocketMap.emplace(pid, uuid);
 
-	typedef std::multimap<std::string, pid_t>::const_iterator it_t;
-	std::pair<it_t, it_t> its = data->procNamePidMap.equal_range(procArgs);
-	for (it_t it = its.first; it != its.second; ++it)
-		if (it->second == pid)
-			return;
-	data->procNamePidMap.emplace_hint(its.second, procArgs, pid);
+	NetUuidData::pidlist_t *pidVec =
+				getOrCreateProcPidVector(procArgs, data);
+	if (std::find(pidVec->begin(), pidVec->end(), pid) == pidVec->end())
+		pidVec->push_back(pid);
 }
